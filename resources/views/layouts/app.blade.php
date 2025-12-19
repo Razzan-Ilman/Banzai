@@ -11,6 +11,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- BANZAI Locked Color System -->
+    <link rel="stylesheet" href="{{ asset('css/banzai-colors.css') }}">
+    
+    <!-- Phase 0: UI Foundation -->
+    <link rel="stylesheet" href="{{ asset('css/foundation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+    
+    <!-- Phase 9: No-JS Fallback -->
+    <noscript>
+        <link rel="stylesheet" href="{{ asset('css/no-js.css') }}">
+    </noscript>
+    
     <!-- Styles -->
     <style>
 /* BANZAI Design System - Inlined for robustness */
@@ -202,7 +214,7 @@ button {
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: var(--space-xl);
+    gap: 2rem;
 }
 
 .nav-link {
@@ -210,14 +222,16 @@ button {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
     position: relative;
-    padding: var(--space-xs) 0;
+    padding: var(--space-xs) var(--space-sm);
+    transition: var(--transition-fast);
 }
 
 .nav-link::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 2px;
     background: var(--accent-400);
@@ -226,7 +240,7 @@ button {
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 100%;
+    width: 80%;
 }
 
 /* Scrolled state - white background with dark text */
@@ -255,11 +269,14 @@ button {
 }
 
 .nav-cta {
-    background: var(--accent-600);
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
     color: var(--white) !important;
-    padding: var(--space-sm) var(--space-lg) !important;
+    padding: var(--space-sm) var(--space-xl) !important;
     border-radius: var(--radius-full);
     font-weight: 600;
+    border: none;
+    box-shadow: 0 2px 8px rgba(6, 78, 59, 0.25);
+    transition: var(--transition-normal);
 }
 
 .nav-cta::after {
@@ -267,9 +284,9 @@ button {
 }
 
 .nav-cta:hover {
-    background: var(--accent-700);
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(219, 39, 119, 0.3);
+    box-shadow: 0 4px 16px rgba(6, 78, 59, 0.35);
 }
 
 /* Mobile Navigation Toggle */
@@ -831,50 +848,95 @@ button {
     color: #991B1B;
 }
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER (Clean Minimal Design) ===== */
 .footer {
-    background: var(--primary-900);
+    background: linear-gradient(180deg, var(--primary-800) 0%, var(--primary-900) 100%);
     color: var(--white);
-    padding: var(--space-4xl) var(--space-lg) var(--space-xl);
+    padding: var(--space-3xl) var(--space-lg) var(--space-lg);
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
 }
 
 .footer-container {
     max-width: var(--container-max);
     margin: 0 auto;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
 }
 
 .footer-brand {
-    margin-bottom: var(--space-2xl);
+    text-align: center;
 }
 
 .footer-kanji {
-    font-family: var(--font-heading);
-    font-size: var(--text-3xl);
-    opacity: 0.7;
-    display: block;
-    margin-bottom: var(--space-sm);
+    font-family: 'Shippori Mincho', 'Noto Sans JP', serif;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.3em;
+    margin-bottom: var(--space-xs);
 }
 
 .footer-text {
     font-family: var(--font-heading);
-    font-size: var(--text-2xl);
-    font-weight: 700;
-    letter-spacing: 0.2em;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .footer-tagline {
-    margin-top: var(--space-sm);
-    opacity: 0.7;
-    font-size: var(--text-sm);
+    margin-top: var(--space-xs);
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.05em;
 }
 
 .footer-info {
     display: flex;
     justify-content: center;
-    gap: var(--space-2xl);
+    gap: var(--space-xl);
     flex-wrap: wrap;
-    margin-bottom: var(--space-2xl);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 600px;
+}
+
+.footer-info p {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.footer-bottom {
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .footer-info {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-sm);
+    }
 }
     </style>
     
@@ -922,13 +984,15 @@ button {
             </div>
             
             <div class="footer-info">
-                <p>📍 SMKN 13 Bandung</p>
-                <p>👩‍🏫 Pembina: Indah Sensei</p>
-                <p>📅 Berdiri sejak 2009</p>
+                <p>SMKN 13 Bandung</p>
+                <p>•</p>
+                <p>Pembina: Indah Sensei</p>
+                <p>•</p>
+                <p>Est. 2009</p>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} BANZAI. Dibuat dengan ❤️ untuk pecinta Jepang.</p>
+                <p>&copy; {{ date('Y') }} BANZAI — Dibuat untuk pecinta budaya Jepang</p>
             </div>
         </div>
     </footer>
@@ -954,6 +1018,12 @@ button {
     
     <!-- Living Japanese Digital Space -->
     <script src="/js/living-space.js"></script>
+    
+    <!-- Phase 5: Living Background System -->
+    <script src="{{ asset('js/living-background.js') }}"></script>
+    
+    <!-- Phase 6: Particle System (Max 8, Context-Aware) -->
+    <script src="{{ asset('js/particles.js') }}"></script>
     
     @stack('scripts')
 </body>

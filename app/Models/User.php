@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -43,5 +44,35 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Member relationships
+    public function memberProfile()
+    {
+        return $this->hasOne(MemberProfile::class);
+    }
+
+    public function groupAssignments()
+    {
+        return $this->hasMany(MemberGroupAssignment::class);
+    }
+
+    public function currentGroup()
+    {
+        return $this->hasOne(MemberGroupAssignment::class)
+            ->where('is_active', true)
+            ->where('month_start', '<=', now())
+            ->where('month_end', '>=', now())
+            ->with('group');
+    }
+
+    public function medals()
+    {
+        return $this->hasMany(MemberMedal::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(MemberAttendance::class);
     }
 }

@@ -8,6 +8,77 @@
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
+
+/* Mobile Responsive for Divisions */
+@media (max-width: 1024px) {
+    /* Grid becomes single column on tablets */
+    div[style*="grid-template-columns: 1fr 1.2fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 5rem 1rem 2rem !important;
+    }
+
+    .page-title {
+        font-size: 1.8rem !important;
+    }
+
+    .page-subtitle {
+        font-size: 0.9rem !important;
+    }
+
+    .section-container {
+        padding: 0 1rem !important;
+    }
+
+    /* Division logo circle - updated for 300px */
+    div[style*="width: 300px"] {
+        width: 220px !important;
+        height: 220px !important;
+    }
+
+    div[style*="width: 300px"] img {
+        width: 140px !important;
+        height: 140px !important;
+    }
+
+    /* Section titles */
+    h2[style*="2.5rem"] {
+        font-size: 1.6rem !important;
+    }
+
+    /* Koordinator badge */
+    div[style*="width: 70px"] {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    /* Text sizes */
+    p[style*="text-lg"] {
+        font-size: 0.95rem !important;
+    }
+
+    blockquote {
+        padding-left: 1rem !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    div[style*="width: 300px"] {
+        width: 180px !important;
+        height: 180px !important;
+    }
+
+    div[style*="width: 300px"] img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+}
 </style>
 @endpush
 
@@ -24,7 +95,7 @@
     @foreach($divisions as $index => $division)
         <section class="section" style="{{ $index % 2 == 1 ? 'background: var(--neutral-100);' : '' }}">
             <div class="section-container">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: var(--space-3xl); align-items: center;">
+                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--space-4xl); align-items: center;">
                     
                     @if($index % 2 == 0)
                         <!-- Logo/Visual -->
@@ -39,7 +110,7 @@
                                 $logoFile = $logoMap[$division->name] ?? null;
                             @endphp
                             <!-- Outer decorative frame -->
-                            <div style="position: relative; width: 240px; height: 240px; margin: 0 auto;">
+                            <div style="position: relative; width: 300px; height: 300px; margin: 0 auto;">
                                 <!-- Rotating dashed border -->
                                 <div style="position: absolute; inset: 0; border: 2px dashed {{ $division->color }}40; border-radius: 50%; animation: divisionRotate 30s linear infinite;"></div>
                                 <!-- Inner frame -->
@@ -47,13 +118,13 @@
                                 <!-- Logo container -->
                                 <div style="position: absolute; inset: 20px; border-radius: 50%; background: linear-gradient(135deg, {{ $division->color }}15, {{ $division->color }}30); display: flex; align-items: center; justify-content: center; overflow: hidden;">
                                     @if($logoFile)
-                                        <img src="{{ asset('images/logo/' . $logoFile) }}" alt="{{ $division->name }} Logo" style="width: 140px; height: 140px; object-fit: contain;">
+                                        <img src="{{ asset('images/logo/' . $logoFile) }}" alt="{{ $division->name }} Logo" style="width: 180px; height: 180px; object-fit: contain;">
                                     @else
-                                        <span style="font-size: 80px;">{{ $division->icon }}</span>
+                                        <span style="font-size: 100px;">{{ $division->icon }}</span>
                                     @endif
                                 </div>
                                 <!-- Corner accent -->
-                                <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 30px; height: 6px; background: {{ $division->color }}; border-radius: 3px;"></div>
+                                <!-- <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: {{ $division->color }}; border-radius: 4px;"></div> -->
                             </div>
                         </div>
                     @endif
@@ -61,35 +132,35 @@
                     <!-- Content -->
                     <div>
                         <div style="border-left: 4px solid {{ $division->color }}; padding-left: var(--space-xl);">
-                            <span style="color: {{ $division->color }}; font-size: var(--text-sm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;">{{ $division->character }}</span>
-                            <h2 style="font-size: var(--text-3xl); color: var(--neutral-900); margin: var(--space-sm) 0 var(--space-lg);">{{ $division->name }}</h2>
+                            <span style="color: {{ $division->color }}; font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;">{{ $division->character }}</span>
+                            <h2 style="font-size: 2.5rem; color: var(--neutral-900); margin: var(--space-sm) 0 var(--space-lg); font-weight: 700; line-height: 1.2;">{{ $division->name }}</h2>
                         </div>
                         
-                        <p style="font-size: var(--text-lg); line-height: 1.9; color: var(--neutral-700); margin-bottom: var(--space-xl);">
+                        <p style="font-size: var(--text-lg); line-height: 1.9; color: var(--neutral-600); margin-bottom: var(--space-xl);">
                             {{ $division->description }}
                         </p>
 
-                        <blockquote style="font-style: italic; color: var(--neutral-600); border-left: 2px solid {{ $division->color }}; padding-left: var(--space-lg); margin-bottom: var(--space-xl);">
+                        <blockquote style="font-style: italic; color: var(--neutral-500); border-left: 3px solid {{ $division->color }}60; padding-left: var(--space-lg); margin-bottom: var(--space-xl); font-size: var(--text-base);">
                             "{{ $division->tagline }}"
                         </blockquote>
 
                         @php
                             $koordinatorMap = [
-                                'Divisi Bahasa' => ['name' => 'Kenji Watanabe', 'photo' => 'Kor.Bahasa.jpg', 'class' => 'XI – Multimedia'],
-                                'Divisi Budaya' => ['name' => 'Mei Kobayashi', 'photo' => 'Kor.Budaya.jpg', 'class' => 'XI – Tata Busana'],
-                                'Divisi Media Sosial' => ['name' => 'Ren Takahashi', 'photo' => 'Kor.Medsos.jpg', 'class' => 'XI – DKV'],
+                                'Divisi Bahasa' => ['name' => 'Bima Ksatria', 'photo' => 'Kor.Bahasa.jpg', 'class' => 'XII TKJ 1'],
+                                'Divisi Budaya' => ['name' => 'Razzan Ilman', 'photo' => 'Kor.Budaya.jpg', 'class' => 'XII RPL 1'],
+                                'Divisi Media Sosial' => ['name' => 'Raihanisa', 'photo' => 'Kor.Medsos.jpg', 'class' => 'XII KA 6'],
                             ];
                             $koordinator = $koordinatorMap[$division->name] ?? null;
                         @endphp
                         @if($koordinator)
                             <div>
-                                <h4 style="font-size: var(--text-sm); color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-md);">Koordinator Divisi</h4>
+                                <h4 style="font-size: var(--text-xs); color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: var(--space-md); font-weight: 600;">Koordinator Divisi</h4>
                                 <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
-                                    <div style="display: flex; align-items: center; gap: var(--space-sm); background: var(--white); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-full); box-shadow: var(--shadow-sm);">
-                                        <img src="{{ asset('images/members/' . $koordinator['photo']) }}" alt="{{ $koordinator['name'] }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid {{ $division->color }};">
+                                    <div style="display: flex; align-items: center; gap: var(--space-lg); background: var(--white); padding: var(--space-md) var(--space-xl); border-radius: var(--radius-full); box-shadow: var(--shadow-md); border: 1px solid var(--neutral-100);">
+                                        <img src="{{ asset('images/members/' . $koordinator['photo']) }}" alt="{{ $koordinator['name'] }}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid {{ $division->color }};">
                                         <div>
-                                            <span style="font-size: var(--text-sm); font-weight: 600; display: block;">{{ $koordinator['name'] }}</span>
-                                            <span style="font-size: var(--text-xs); color: var(--neutral-500);">{{ $koordinator['class'] }}</span>
+                                            <span style="font-size: var(--text-lg); font-weight: 600; display: block; color: var(--neutral-800);">{{ $koordinator['name'] }}</span>
+                                            <span style="font-size: var(--text-sm); color: var(--neutral-500);">{{ $koordinator['class'] }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +181,7 @@
                                 $logoFile = $logoMap[$division->name] ?? null;
                             @endphp
                             <!-- Outer decorative frame -->
-                            <div style="position: relative; width: 240px; height: 240px; margin: 0 auto;">
+                            <div style="position: relative; width: 300px; height: 300px; margin: 0 auto;">
                                 <!-- Rotating dashed border -->
                                 <div style="position: absolute; inset: 0; border: 2px dashed {{ $division->color }}40; border-radius: 50%; animation: divisionRotate 30s linear infinite;"></div>
                                 <!-- Inner frame -->
@@ -118,13 +189,13 @@
                                 <!-- Logo container -->
                                 <div style="position: absolute; inset: 20px; border-radius: 50%; background: linear-gradient(135deg, {{ $division->color }}15, {{ $division->color }}30); display: flex; align-items: center; justify-content: center; overflow: hidden;">
                                     @if($logoFile)
-                                        <img src="{{ asset('images/logo/' . $logoFile) }}" alt="{{ $division->name }} Logo" style="width: 140px; height: 140px; object-fit: contain;">
+                                        <img src="{{ asset('images/logo/' . $logoFile) }}" alt="{{ $division->name }} Logo" style="width: 180px; height: 180px; object-fit: contain;">
                                     @else
-                                        <span style="font-size: 80px;">{{ $division->icon }}</span>
+                                        <span style="font-size: 100px;">{{ $division->icon }}</span>
                                     @endif
                                 </div>
                                 <!-- Corner accent -->
-                                <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 30px; height: 6px; background: {{ $division->color }}; border-radius: 3px;"></div>
+                                <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: {{ $division->color }}; border-radius: 4px;"></div>
                             </div>
                         </div>
                     @endif

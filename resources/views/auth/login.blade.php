@@ -1,453 +1,620 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BANZAI Admin</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
-    
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --matcha-deep: #1B4332;
-            --matcha: #064E3B;
-            --matcha-light: #10B981;
-            --sakura: #FFB7C5;
-            --ink: #1a1a2e;
-            --paper: #FAFAFA;
-            --text-muted: #9ca3af;
+@extends('layouts.auth')
+
+@section('title', 'Login')
+
+@section('content')
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .login-page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+        overflow: hidden;
+    }
+
+    /* LEFT SIDE - FORM */
+    .login-form-container {
+        background: white;
+        padding: 3rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 10;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .brand-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 3rem;
+    }
+
+    .brand-icon {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #EC4899, #F472B6);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+    }
+
+    .brand-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #0EA5E9, #EC4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .form-content {
+        max-width: 420px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .kanji-title {
+        font-family: 'Noto Sans JP', serif;
+        font-size: 4.5rem;
+        text-align: center;
+        background: linear-gradient(135deg, #0EA5E9, #EC4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        animation: gradientShift 3s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { filter: hue-rotate(0deg); }
+        50% { filter: hue-rotate(10deg); }
+    }
+
+    .login-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: #0F172A;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-subtitle {
+        text-align: center;
+        color: #64748B;
+        margin-bottom: 2.5rem;
+        font-size: 1rem;
+    }
+
+    .social-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .social-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.125rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    }
+
+    .social-btn:hover {
+        background: linear-gradient(135deg, #EC4899, #F472B6);
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
+    }
+
+    .divider {
+        text-align: center;
+        color: #94A3B8;
+        font-size: 0.875rem;
+        margin: 2rem 0;
+        position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #CBD5E1, transparent);
+    }
+
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #0F172A;
+        margin-bottom: 0.5rem;
+        font-size: 0.9375rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid #E0F2FE;
+        border-radius: 14px;
+        font-size: 1rem;
+        background: #F0F9FF;
+        transition: all 0.3s ease;
+        color: #0F172A;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #0EA5E9;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: #94A3B8;
+    }
+
+    .button-group {
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 1.125rem;
+        border: none;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 1.0625rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+        color: white;
+        box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
+    }
+
+    .btn-login:hover {
+        background: linear-gradient(135deg, #0284C7, #0891B2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(14, 165, 233, 0.5);
+    }
+
+    .btn-signup {
+        background: linear-gradient(135deg, #EC4899, #F472B6);
+        color: white;
+        box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3);
+    }
+
+    .btn-signup:hover {
+        background: linear-gradient(135deg, #DB2777, #EC4899);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(236, 72, 153, 0.4);
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .back-link a {
+        color: #64748B;
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: color 0.3s ease;
+    }
+
+    .back-link a:hover {
+        color: #0EA5E9;
+    }
+
+    /* RIGHT SIDE - TOKYO 3D ILLUSTRATION */
+    .login-illustration {
+        background: linear-gradient(135deg, #7DD3FC 0%, #BAE6FD 50%, #E0F2FE 100%);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Animated clouds */
+    .cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 100px;
+        animation: cloudFloat 30s linear infinite;
+    }
+
+    .cloud::before,
+    .cloud::after {
+        content: '';
+        position: absolute;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 100px;
+    }
+
+    .cloud-1 {
+        width: 100px;
+        height: 40px;
+        top: 15%;
+        left: -100px;
+        animation-delay: 0s;
+    }
+
+    .cloud-1::before {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+        left: 10px;
+    }
+
+    .cloud-1::after {
+        width: 60px;
+        height: 40px;
+        top: -15px;
+        right: 10px;
+    }
+
+    .cloud-2 {
+        width: 120px;
+        height: 45px;
+        top: 60%;
+        left: -120px;
+        animation-delay: 10s;
+    }
+
+    .cloud-2::before {
+        width: 60px;
+        height: 60px;
+        top: -30px;
+        left: 15px;
+    }
+
+    .cloud-2::after {
+        width: 70px;
+        height: 45px;
+        top: -20px;
+        right: 15px;
+    }
+
+    @keyframes cloudFloat {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(100vw + 200px)); }
+    }
+
+    /* Tokyo city container */
+    .tokyo-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    /* Main Tokyo image */
+    .tokyo-image {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        animation: float 6s ease-in-out infinite;
+        filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.3));
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-25px) rotate(1deg); }
+    }
+
+    .tokyo-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: brightness(1.1) contrast(1.05);
+    }
+
+    /* Glowing aura around image */
+    .tokyo-image::before {
+        content: '';
+        position: absolute;
+        inset: -40px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.4), rgba(236, 72, 153, 0.3), transparent 70%);
+        filter: blur(40px);
+        z-index: -1;
+        animation: auraGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes auraGlow {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* Floating elements around Tokyo */
+    .floating-element {
+        position: absolute;
+        animation: floatAround 8s ease-in-out infinite;
+    }
+
+    .sushi-1 {
+        top: 10%;
+        left: 15%;
+        font-size: 2.5rem;
+        animation-delay: 0s;
+    }
+
+    .sushi-2 {
+        top: 15%;
+        right: 20%;
+        font-size: 2rem;
+        animation-delay: 1s;
+    }
+
+    .lantern-1 {
+        bottom: 25%;
+        left: 10%;
+        font-size: 2rem;
+        animation-delay: 2s;
+    }
+
+    .lantern-2 {
+        top: 50%;
+        right: 15%;
+        font-size: 2.5rem;
+        animation-delay: 3s;
+    }
+
+    .robot {
+        bottom: 30%;
+        right: 10%;
+        font-size: 3rem;
+        animation-delay: 1.5s;
+    }
+
+    @keyframes floatAround {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-15px) rotate(5deg); }
+        75% { transform: translateY(-10px) rotate(-5deg); }
+    }
+
+    /* Glowing lights effect */
+    .glow-light {
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.5;
+        animation: glowPulse 4s ease-in-out infinite;
+    }
+
+    .glow-pink {
+        background: radial-gradient(circle, #EC4899, #F472B6);
+        top: 15%;
+        right: 5%;
+        animation-delay: 0s;
+    }
+
+    .glow-blue {
+        background: radial-gradient(circle, #0EA5E9, #06B6D4);
+        bottom: 15%;
+        left: 5%;
+        animation-delay: 2s;
+    }
+
+    .glow-cyan {
+        background: radial-gradient(circle, #06B6D4, #22D3EE);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        animation-delay: 1s;
+    }
+
+    @keyframes glowPulse {
+        0%, 100% { opacity: 0.4; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.3); }
+    }
+
+    /* Welcome text overlay */
+    .welcome-overlay {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: white;
+        z-index: 10;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .welcome-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #FFF, #E0F2FE);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .welcome-subtitle {
+        font-size: 1.125rem;
+        opacity: 0.95;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .login-page {
+            grid-template-columns: 1fr;
         }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Ambient light - static gradient */
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(16, 185, 129, 0.06), transparent 40%),
-                linear-gradient(180deg, #1a1f2e, #16213e);
-            color: #ffffff;
-            padding: 1.5rem;
-            position: relative;
+
+        .login-illustration {
+            display: none;
         }
-        
-        /* Matcha Dust - spasial */
-        .dust {
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
+    }
+
+    @media (max-width: 480px) {
+        .login-form-container {
+            padding: 2rem 1.5rem;
         }
-        
-        .dust-1 {
-            width: 250px;
-            height: 250px;
-            top: 5%;
-            left: -3%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.02), transparent 60%);
-            filter: blur(10px);
-            animation: dustMove 45s ease-in-out infinite;
+
+        .button-group {
+            grid-template-columns: 1fr;
         }
-        
-        @keyframes dustMove {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(15px, 10px); }
+
+        .kanji-title {
+            font-size: 3.5rem;
         }
-        
-        .login-container {
-            display: flex;
-            max-width: 850px;
-            width: 100%;
-            background: rgba(37, 43, 61, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 1.25rem;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 1;
-            animation: containerFade 0.5s ease-out;
-        }
-        
-        @keyframes containerFade {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Left Panel */
-        .login-image {
-            flex: 1;
-            background: linear-gradient(150deg, var(--matcha), var(--matcha-deep));
-            min-height: 480px;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-            position: relative;
-        }
-        
-        /* Subtle texture */
-        .login-image::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            opacity: 0.015;
-            pointer-events: none;
-        }
-        
-        .login-image-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .login-brand {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .login-brand-kanji {
-            font-family: 'Shippori Mincho', serif;
-            font-size: 1.5rem;
-            color: var(--sakura);
-            opacity: 0.85;
-        }
-        
-        .login-brand-text {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: white;
-            letter-spacing: 0.12em;
-        }
-        
-        .back-link {
-            padding: 0.4rem 0.875rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
-            color: white;
-            text-decoration: none;
-            font-size: 0.75rem;
-            transition: all 0.25s ease;
-        }
-        
-        .back-link:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
-        
-        .image-center {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .enso {
-            width: 120px;
-            height: 120px;
-            border: 2px solid rgba(255, 183, 197, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .enso-kanji {
-            font-family: 'Shippori Mincho', serif;
-            font-size: 2rem;
-            color: rgba(255, 183, 197, 0.8);
-        }
-        
-        .tagline {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .tagline h2 {
-            font-family: 'Shippori Mincho', serif;
-            font-size: 1.125rem;
-            font-weight: 400;
-            color: white;
-            line-height: 1.5;
-        }
-        
-        .tagline h2 span {
-            color: var(--sakura);
-        }
-        
-        /* Brush divider */
-        .brush-line {
-            width: 50px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--sakura), transparent);
-            margin: 1rem auto 0;
-            opacity: 0.6;
-        }
-        
-        /* Right Panel - Form */
-        .login-form-panel {
-            flex: 1;
-            padding: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .form-header {
-            margin-bottom: 1.75rem;
-        }
-        
-        .form-header h1 {
-            font-size: 1.375rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.25rem;
-        }
-        
-        /* Brush underline */
-        .form-header h1::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--matcha-light), transparent);
-            margin-top: 0.5rem;
-            animation: brushDraw 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
-        }
-        
-        @keyframes brushDraw {
-            to { width: 60px; }
-        }
-        
-        .form-header p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.125rem;
-        }
-        
-        .form-label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 0.375rem;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(45, 53, 72, 0.7);
-            border: 1px solid rgba(61, 69, 89, 0.8);
-            border-radius: 0.5rem;
-            color: white;
-            font-size: 0.9rem;
-            font-family: inherit;
-            transition: all 0.25s ease;
-        }
-        
-        .form-input::placeholder {
-            color: #6b7280;
-        }
-        
-        /* Focus light */
-        .form-input:focus {
-            outline: none;
-            border-color: var(--matcha-light);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-        
-        .input-group {
-            position: relative;
-        }
-        
-        .input-toggle {
-            position: absolute;
-            right: 0.875rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .form-error {
-            color: #f87171;
-            font-size: 0.75rem;
-            margin-top: 0.375rem;
-        }
-        
-        .form-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-            margin: 1.25rem 0;
-        }
-        
-        .form-checkbox input[type="checkbox"] {
-            width: 1rem;
-            height: 1rem;
-            accent-color: var(--sakura);
-        }
-        
-        .form-checkbox label {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 0.875rem;
-            background: var(--sakura);
-            border: none;
-            border-radius: 0.5rem;
-            color: var(--matcha-deep);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-        
-        /* Focus light on hover */
-        .login-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(255, 183, 197, 0.25);
-        }
-        
-        .login-btn:active {
-            transform: translateY(0);
-        }
-        
-        /* Responsive */
-        @media (max-width: 700px) {
-            .login-container {
-                flex-direction: column;
-            }
-            
-            .login-image {
-                min-height: 260px;
-            }
-            
-            .enso {
-                width: 90px;
-                height: 90px;
-            }
-            
-            .enso-kanji {
-                font-size: 1.5rem;
-            }
-            
-            .login-form-panel {
-                padding: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Matcha Dust -->
-    <div class="dust dust-1"></div>
-    
-    <div class="login-container">
-        <!-- Left Panel -->
-        <div class="login-image">
-            <div class="login-image-header">
-                <div class="login-brand">
-                    <span class="login-brand-kanji">万歳</span>
-                    <span class="login-brand-text">BANZAI</span>
-                </div>
-                <a href="{{ route('home') }}" class="back-link">← Kembali</a>
-            </div>
-            
-            <div class="image-center">
-                <div class="enso">
-                    <span class="enso-kanji">管</span>
-                </div>
-            </div>
-            
-            <div class="tagline">
-                <h2>Kelola dengan <span>Ketenangan</span></h2>
-                <div class="brush-line"></div>
-            </div>
+    }
+</style>
+
+<div class="login-page">
+    <!-- LEFT SIDE - FORM -->
+    <div class="login-form-container">
+        <div class="brand-header">
+            <div class="brand-icon">万</div>
+            <span class="brand-name">BANZAI</span>
         </div>
-        
-        <!-- Right Panel -->
-        <div class="login-form-panel">
-            <div class="form-header">
-                <h1>Masuk ke Admin</h1>
-                <p>Kelola website BANZAI dengan mudah</p>
+
+        <div class="form-content">
+            <div class="kanji-title">万歳</div>
+            <h1 class="login-title">Member Login</h1>
+            <p class="login-subtitle">Masuk ke akun BANZAI Anda</p>
+
+            <div class="social-buttons">
+                <a href="#" class="social-btn">G</a>
+                <a href="#" class="social-btn">in</a>
+                <a href="#" class="social-btn">f</a>
+                <a href="#" class="social-btn">𝕏</a>
             </div>
-            
-            <form action="{{ route('login') }}" method="POST">
+
+            <div class="divider">atau gunakan email</div>
+
+            @if ($errors->any())
+                <div style="background: #FEE2E2; color: #991B1B; padding: 1rem; border-radius: 14px; margin-bottom: 1.5rem; font-size: 0.875rem;">
+                    <strong>⚠️ Error:</strong>
+                    <ul style="margin: 0.5rem 0 0 1.25rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
-                
+
                 <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
+                    <label class="form-label" for="email">Email</label>
                     <input 
                         type="email" 
                         id="email" 
                         name="email" 
                         class="form-input" 
-                        placeholder="admin@banzai.sch.id"
-                        value="{{ old('email') }}" 
+                        value="{{ old('email') }}"
+                        placeholder="razzan"
                         required 
                         autofocus
                     >
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            class="form-input" 
-                            placeholder="••••••••"
-                            required
-                        >
-                        <button type="button" class="input-toggle" onclick="togglePassword()">👁</button>
-                    </div>
+                    <label class="form-label" for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="••••••••••••"
+                        required
+                    >
                 </div>
-                
-                @error('email')
-                    <div class="form-error">{{ $message }}</div>
-                @enderror
-                
-                <div class="form-checkbox">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Ingat saya</label>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-login">Login</button>
+                    <a href="{{ route('auth.register') }}" class="btn btn-signup">Sign up</a>
                 </div>
-                
-                <button type="submit" class="login-btn">Masuk</button>
             </form>
+
+            <div class="back-link">
+                <a href="{{ route('landing') }}">← Kembali ke Landing</a>
+            </div>
         </div>
     </div>
-    
-    <script>
-        function togglePassword() {
-            const input = document.getElementById('password');
-            const btn = document.querySelector('.input-toggle');
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = '🙈';
-            } else {
-                input.type = 'password';
-                btn.textContent = '👁';
-            }
-        }
-    </script>
-</body>
-</html>
+
+    <!-- RIGHT SIDE - TOKYO 3D ILLUSTRATION -->
+    <div class="login-illustration">
+        <!-- Glowing lights -->
+        <div class="glow-light glow-pink"></div>
+        <div class="glow-light glow-blue"></div>
+        <div class="glow-light glow-cyan"></div>
+
+        <!-- Animated clouds -->
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+
+        <div class="tokyo-container">
+            <!-- Main Tokyo 3D Image -->
+            <div class="tokyo-image">
+                <img src="{{ asset('images/hero/Tokyo.png') }}" alt="Tokyo City 3D">
+            </div>
+
+            <!-- Floating elements -->
+            <div class="floating-element sushi-1">🍣</div>
+            <div class="floating-element sushi-2">🍱</div>
+            <div class="floating-element lantern-1">🏮</div>
+            <div class="floating-element lantern-2">🏮</div>
+            <div class="floating-element robot">🤖</div>
+
+            <!-- Welcome text -->
+            <div class="welcome-overlay">
+                <h2 class="welcome-title">Selamat Datang Kembali!</h2>
+                <p class="welcome-subtitle">Lanjutkan perjalanan belajar Anda</p>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

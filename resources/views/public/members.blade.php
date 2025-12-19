@@ -4,26 +4,53 @@
 
 @push('styles')
 <style>
-    /* ===== PAGE HEADER ===== */
+    /* ===== PAGE HEADER - LIVING COMMUNITY SPACE ===== */
     .members-header {
         padding-top: calc(80px + 4rem);
         padding-bottom: 3rem;
-        background: linear-gradient(160deg, var(--primary-900), var(--primary-800));
+        background: linear-gradient(160deg, var(--indigo-900), var(--indigo-800));
+        background-size: 200% 200%;
         position: relative;
         overflow: hidden;
         text-align: center;
     }
 
+    /* Living Background - Warm Glow Shift (45s loop) */
     .members-header::before {
-        content: '組';
+        content: '';
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-family: 'Shippori Mincho', serif;
-        font-size: 20rem;
-        color: rgba(255, 255, 255, 0.02);
+        inset: 0;
+        background: radial-gradient(ellipse at 30% 50%, rgba(251, 191, 36, 0.12), transparent 60%),
+                    radial-gradient(ellipse at 70% 50%, rgba(16, 185, 129, 0.08), transparent 50%);
+        animation: warmGlow 45s ease-in-out infinite;
         pointer-events: none;
+    }
+
+    @keyframes warmGlow {
+        0%, 100% { 
+            opacity: 0.6;
+            transform: scale(1) translateX(0);
+        }
+        50% { 
+            opacity: 1;
+            transform: scale(1.1) translateX(20px);
+        }
+    }
+
+    /* Asanoha Pattern - Community Structure */
+    .members-header::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L45 15L30 30L15 15Z M30 30L45 45L30 60L15 45Z M0 30L15 15L30 30L15 45Z M30 30L45 15L60 30L45 45Z' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.04'/%3E%3C/svg%3E");
+        background-size: 60px 60px;
+        opacity: 0.5;
+        animation: patternStable 90s linear infinite;
+    }
+
+    @keyframes patternStable {
+        0% { transform: translateX(0) translateY(0); }
+        100% { transform: translateX(60px) translateY(60px); }
     }
 
     .members-header-content {
@@ -585,8 +612,8 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Ketua.jpg') }}" alt="Ketua" class="member-photo">
                     </div>
-                    <h3 class="member-name">Akira Tanaka</h3>
-                    <p class="member-class">XI – Rekayasa Perangkat Lunak</p>
+                    <h3 class="member-name">Aditya Setiawan</h3>
+                    <p class="member-class">XII RPL 1</p>
                     <span class="member-position">Ketua Umum</span>
                 </div>
             </div>
@@ -603,8 +630,8 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Wakil-Ketua.jpeg') }}" alt="Wakil Ketua" class="member-photo">
                     </div>
-                    <h3 class="member-name">Sakura Yamamoto</h3>
-                    <p class="member-class">XI – Kimia Analisis</p>
+                    <h3 class="member-name">Silvani</h3>
+                    <p class="member-class">XII KA 3</p>
                     <span class="member-position">Wakil Ketua</span>
                 </div>
 
@@ -614,9 +641,9 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Kor.Medsos-2.jpg') }}" alt="Koordinator Medsos 2" class="member-photo">
                     </div>
-                    <h3 class="member-name">Koordinator Medsos 2</h3>
-                    <p class="member-class">XI – Multimedia</p>
-                    <span class="member-position">Koordinator Medsos</span>
+                    <h3 class="member-name">Micky Yuhana</h3>
+                    <p class="member-class">XII KA 6</p>
+                    <span class="member-position">Koordinator Medsos 2</span>
                 </div>
 
                 <div class="member-card member-card--bendahara">
@@ -625,8 +652,8 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Bendahara.jpg') }}" alt="Bendahara" class="member-photo">
                     </div>
-                    <h3 class="member-name">Yuki Nakamura</h3>
-                    <p class="member-class">XI – Akuntansi</p>
+                    <h3 class="member-name">Siti Jasmine</h3>
+                    <p class="member-class">XII KA 6</p>
                     <span class="member-position">Bendahara</span>
                 </div>
             </div>
@@ -643,8 +670,8 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Kor.Bahasa.jpg') }}" alt="Koordinator Bahasa" class="member-photo">
                     </div>
-                    <h3 class="member-name">Kenji Watanabe</h3>
-                    <p class="member-class">XI – Multimedia</p>
+                    <h3 class="member-name">Bima Ksatria</h3>
+                    <p class="member-class">XII TKJ 1</p>
                     <span class="member-position">Koordinator Bahasa</span>
                 </div>
 
@@ -654,8 +681,8 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Kor.Budaya.jpg') }}" alt="Koordinator Budaya" class="member-photo">
                     </div>
-                    <h3 class="member-name">Mei Kobayashi</h3>
-                    <p class="member-class">XI – Tata Busana</p>
+                    <h3 class="member-name">Razzan Ilman</h3>
+                    <p class="member-class">XII RPL 1</p>
                     <span class="member-position">Koordinator Budaya</span>
                 </div>
 
@@ -665,8 +692,8 @@
                         <div class="member-photo-frame"></div>
                         <img src="{{ asset('images/members/Kor.Medsos.jpg') }}" alt="Koordinator Medsos" class="member-photo">
                     </div>
-                    <h3 class="member-name">Ren Takahashi</h3>
-                    <p class="member-class">XI – Desain Komunikasi Visual</p>
+                    <h3 class="member-name">Raihanisa</h3>
+                    <p class="member-class">XII KA 6</p>
                     <span class="member-position">Koordinator Medsos</span>
                 </div>
             </div>

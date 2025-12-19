@@ -1,0 +1,284 @@
+/**
+ * BANZAI Member Adaptive UI Styles
+ * CSS for adaptive theming based on group & level
+ */
+
+/* CSS Variables for Adaptive Theme */
+:root {
+    --group-primary: #0EA5E9;
+    --group-secondary: #0284C7;
+    --group-accent: #38BDF8;
+    --group-gradient: linear-gradient(135deg, #0EA5E9, #0284C7);
+}
+
+/* Level-based Effects */
+
+/* Level 1 - Initiate (Minimal) */
+body.level-1 .stat-card {
+    transition: transform 0.2s ease;
+}
+
+body.level-1 .stat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Level 2 - Adept (Subtle Glow) */
+body.level-2 .has-glow {
+    box-shadow: 0 4px 16px rgba(var(--group-primary-rgb), 0.2);
+    transition: all 0.3s ease;
+}
+
+body.level-2 .has-glow:hover {
+    box-shadow: 0 8px 24px rgba(var(--group-primary-rgb), 0.3);
+}
+
+body.level-2 .stat-card {
+    transition: all 0.3s ease;
+}
+
+body.level-2 .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Level 3 - Master (Enhanced + Particles) */
+body.level-3 .has-glow {
+    box-shadow: 0 6px 20px rgba(var(--group-primary-rgb), 0.3);
+    transition: all 0.3s ease;
+}
+
+body.level-3 .has-glow:hover {
+    box-shadow: 0 10px 30px rgba(var(--group-primary-rgb), 0.4);
+    transform: translateY(-2px);
+}
+
+body.level-3 .stat-card {
+    transition: all 0.3s ease;
+}
+
+body.level-3 .stat-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* Particles for Level 3 */
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--group-accent);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: particleFloat 20s linear infinite;
+}
+
+.particle:nth-child(1) {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+    left: 50%;
+    animation-delay: 7s;
+}
+
+.particle:nth-child(3) {
+    left: 80%;
+    animation-delay: 14s;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.3;
+    }
+
+    90% {
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: translateY(-100px) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Motion Styles per Group */
+
+/* MUSASHI - Smooth Flow */
+body.motion-smooth-flow * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.motion-smooth-flow .stat-card:hover {
+    animation: smoothPulse 2s ease-in-out infinite;
+}
+
+@keyframes smoothPulse {
+
+    0%,
+    100% {
+        transform: translateY(-4px);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* AME-NO-UZUME - Graceful Dance */
+body.motion-graceful-dance * {
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+body.motion-graceful-dance .stat-card:hover {
+    animation: gracefulSway 3s ease-in-out infinite;
+}
+
+@keyframes gracefulSway {
+
+    0%,
+    100% {
+        transform: translateY(-4px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-6px) rotate(1deg);
+    }
+}
+
+/* FUJIN - Dynamic Burst */
+body.motion-dynamic-burst * {
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.motion-dynamic-burst .stat-card:hover {
+    animation: dynamicPop 0.6s ease-out;
+}
+
+@keyframes dynamicPop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1.02);
+    }
+}
+
+/* YAMATO - Regal Glow */
+body.motion-regal-glow * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.motion-regal-glow .stat-card:hover {
+    animation: regalShine 2s ease-in-out infinite;
+}
+
+@keyframes regalShine {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 20px rgba(199, 161, 74, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 12px 30px rgba(199, 161, 74, 0.4);
+    }
+}
+
+/* Adaptive Button Styles */
+.btn-primary {
+    background: var(--group-gradient) !important;
+    border: none;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+/* Adaptive Stat Cards */
+.stat-card {
+    border-left-width: 4px;
+    border-left-style: solid;
+}
+
+/* Adaptive Progress Bar */
+.progress-fill {
+    background: var(--group-gradient) !important;
+}
+
+/* Adaptive Badges */
+.badge-primary {
+    background: var(--group-primary);
+    color: white;
+}
+
+/* Topbar Title Gradient */
+.topbar-title {
+    background: var(--group-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Medal Display (Level 3 only) */
+body.level-3 .medal-display {
+    display: flex !important;
+    animation: medalShine 3s ease-in-out infinite;
+}
+
+@keyframes medalShine {
+
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.2);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .particles-container {
+        display: none;
+        /* Disable particles on mobile */
+    }
+}
+
+/* Accessibility - Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .particles-container {
+        display: none;
+    }
+}

@@ -4,49 +4,50 @@
 
 @push('styles')
 <style>
-    /* ===== HERO - Full Identity ===== */
+    /* ===== HERO - FIRST BREATH (Digital Cultural Space) ===== */
     .hero {
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        background: linear-gradient(160deg, var(--primary-900) 0%, var(--primary-800) 40%, var(--primary-700) 100%);
+        background: linear-gradient(160deg, var(--indigo-900) 0%, var(--indigo-800) 100%);
+        background-size: 200% 200%;
         overflow: hidden;
     }
 
-    /* Japanese Pattern Overlay - Seigaiha waves */
+    /* Living Background - Slow Gradient Drift (45s loop) */
     .hero::before {
         content: '';
         position: absolute;
         inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='50' viewBox='0 0 100 50'%3E%3Ccircle cx='0' cy='50' r='40' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.05'/%3E%3Ccircle cx='0' cy='50' r='30' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.04'/%3E%3Ccircle cx='0' cy='50' r='20' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.03'/%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.05'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.04'/%3E%3Ccircle cx='50' cy='50' r='20' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.03'/%3E%3Ccircle cx='100' cy='50' r='40' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.05'/%3E%3Ccircle cx='100' cy='50' r='30' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.04'/%3E%3Ccircle cx='100' cy='50' r='20' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.03'/%3E%3C/svg%3E");
-        animation: patternDrift 60s linear infinite;
-        opacity: 0.6;
+        background: linear-gradient(160deg, 
+            var(--indigo-900) 0%, 
+            #2D3E50 40%, 
+            var(--indigo-800) 100%);
+        background-size: 200% 200%;
+        animation: gradientDrift 45s ease-in-out infinite;
+        opacity: 0.9;
     }
 
-    @keyframes patternDrift {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-100px); }
+    @keyframes gradientDrift {
+        0%, 100% { 
+            background-position: 0% 50%;
+        }
+        50% { 
+            background-position: 100% 50%;
+        }
     }
 
-    /* Radial breathing light */
+    /* Washi Texture - 4% opacity, blur halus */
     .hero::after {
         content: '';
         position: absolute;
-        width: 120%;
-        height: 120%;
-        top: -10%;
-        left: -10%;
-        background: radial-gradient(ellipse at 30% 40%, rgba(255, 183, 197, 0.15), transparent 50%),
-                    radial-gradient(ellipse at 70% 60%, rgba(16, 185, 129, 0.1), transparent 40%);
-        animation: breathingLight 8s ease-in-out infinite;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+        opacity: 0.04;
+        filter: blur(0.5px);
         pointer-events: none;
-    }
-
-    @keyframes breathingLight {
-        0%, 100% { opacity: 0.7; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.05); }
     }
 
     .hero-content {
@@ -58,94 +59,120 @@
         max-width: 900px;
     }
 
-    /* Kanji as background layer */
-    .hero-kanji-bg {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-family: 'Shippori Mincho', 'Noto Sans JP', serif;
-        font-size: clamp(15rem, 30vw, 25rem);
-        color: rgba(255, 255, 255, 0.03);
-        pointer-events: none;
-        z-index: 1;
-        user-select: none;
-    }
-
+    /* RITUAL SEQUENCE: Step 1 - Kanji Appears First (Sacred) */
     .hero-kanji {
         font-family: 'Shippori Mincho', 'Noto Sans JP', serif;
-        font-size: clamp(2rem, 5vw, 3rem);
-        color: var(--sakura, #FFB7C5);
-        opacity: 0.9;
-        margin-bottom: 0.5rem;
-        animation: kanjiReveal 1s ease-out 0.5s both;
-    }
-
-    @keyframes kanjiReveal {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 0.9; transform: translateY(0); }
-    }
-
-    .hero-title {
-        font-family: var(--font-heading);
-        font-size: clamp(3.5rem, 10vw, 6rem);
-        font-weight: 700;
-        letter-spacing: 0.2em;
+        font-size: clamp(3rem, 8vw, 6rem);
+        color: var(--sakura-outline);
+        letter-spacing: 0.5em;
         margin-bottom: 1rem;
-        animation: titleReveal 1s ease-out 0.8s both;
-        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        animation: kanjiRitual 2s ease-out 0.3s forwards;
+        filter: drop-shadow(0 0 20px var(--sakura-glow));
     }
 
-    @keyframes titleReveal {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes kanjiRitual {
+        0% { 
+            opacity: 0; 
+            transform: scale(0.8) translateY(20px);
+            filter: blur(10px);
+        }
+        60% { 
+            opacity: 0.5;
+            filter: blur(5px);
+        }
+        100% { 
+            opacity: 0.9; 
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
     }
 
+    /* RITUAL SEQUENCE: Step 2 - Brush Line Draws */
     .hero-brush {
         width: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--sakura, #FFB7C5), transparent);
-        margin: 0 auto 1.5rem;
-        animation: brushDraw 1s ease-out 1.2s forwards;
+        height: 4px;
+        background: linear-gradient(90deg, 
+            transparent, 
+            var(--sakura-outline) 20%, 
+            var(--sakura-outline) 80%, 
+            transparent);
+        margin: 0 auto 2rem;
+        box-shadow: 0 0 20px var(--sakura-glow);
+        animation: brushDraw 1.5s cubic-bezier(0.4, 0, 0.2, 1) 2.5s forwards;
     }
 
     @keyframes brushDraw {
-        to { width: min(200px, 50vw); }
+        0% { width: 0; opacity: 0; }
+        20% { opacity: 1; }
+        100% { width: min(300px, 60vw); opacity: 1; }
+    }
+
+    /* RITUAL SEQUENCE: Step 3 - Title Reveals Last */
+    .hero-title {
+        font-family: var(--font-heading);
+        font-size: clamp(4rem, 12vw, 8rem);
+        font-weight: 700;
+        letter-spacing: 0.25em;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        animation: titleRitual 1.2s ease-out 4s forwards;
+    }
+
+    @keyframes titleRitual {
+        0% { 
+            opacity: 0; 
+            transform: translateY(30px);
+            letter-spacing: 0.1em;
+        }
+        100% { 
+            opacity: 1; 
+            transform: translateY(0);
+            letter-spacing: 0.25em;
+        }
     }
 
     .hero-subtitle {
         font-size: clamp(1rem, 2.5vw, 1.25rem);
         font-weight: 300;
         opacity: 0;
-        margin-bottom: 2rem;
-        animation: subtitleReveal 0.8s ease-out 1.5s forwards;
+        margin-bottom: 2.5rem;
+        letter-spacing: 0.05em;
+        animation: subtitleFade 1s ease-out 5s forwards;
     }
 
-    @keyframes subtitleReveal {
-        to { opacity: 0.9; }
+
+    @keyframes subtitleFade {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 0.85; transform: translateY(0); }
     }
 
     .hero-cta {
         display: inline-block;
-        background: var(--sakura, #FFB7C5);
-        color: var(--primary-900);
+        background: linear-gradient(135deg, var(--indigo-800), var(--indigo-900));
+        color: var(--ivory-100);
         padding: 1rem 2.5rem;
         border-radius: 3rem;
         font-weight: 600;
         font-size: 1.1rem;
         opacity: 0;
-        animation: ctaReveal 0.8s ease-out 1.8s forwards;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 20px rgba(255, 183, 197, 0.3);
+        animation: ctaReveal 0.8s ease-out 5.5s forwards;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @keyframes ctaReveal {
-        to { opacity: 1; }
+        from { opacity: 0; transform: translateY(15px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .hero-cta:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(255, 183, 197, 0.5);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 30px rgba(217, 119, 6, 0.3);
+        background: linear-gradient(135deg, var(--indigo-700), var(--indigo-800));
+        border-color: var(--gold-600);
     }
 
     .hero-scroll {
@@ -435,6 +462,149 @@
         transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
+
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            padding: 1rem;
+        }
+
+        .hero-kanji-bg {
+            font-size: 8rem !important;
+        }
+
+        .hero-kanji {
+            font-size: 1.5rem !important;
+        }
+
+        .hero-title {
+            font-size: 2.5rem !important;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem !important;
+            padding: 0 1rem;
+        }
+
+        .hero-cta {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Philosophy Section */
+        .philosophy-section {
+            padding: 3rem 1rem !important;
+        }
+
+        .philosophy-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+
+        .philosophy-card {
+            padding: 1.5rem !important;
+        }
+
+        .philosophy-kanji {
+            font-size: 2rem !important;
+        }
+
+        .philosophy-title {
+            font-size: 1.1rem !important;
+        }
+
+        .philosophy-desc {
+            font-size: 0.85rem !important;
+        }
+
+        /* Divisions Section */
+        .divisions-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+            padding: 0 0.5rem;
+        }
+
+        .division-card {
+            padding: 1.5rem !important;
+        }
+
+        .division-icon {
+            width: 120px !important;
+            height: 120px !important;
+        }
+
+        .division-icon img {
+            width: 100px !important;
+            height: 100px !important;
+        }
+
+        .division-title {
+            font-size: 1.2rem !important;
+        }
+
+        .division-character {
+            font-size: 0.8rem !important;
+        }
+
+        .division-description {
+            font-size: 0.85rem !important;
+        }
+
+        .division-tagline {
+            font-size: 0.75rem !important;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 3rem 1rem !important;
+        }
+
+        .cta-title {
+            font-size: 1.5rem !important;
+        }
+
+        .cta-description {
+            font-size: 0.9rem !important;
+        }
+
+        .cta-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 1.5rem !important;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem !important;
+        }
+
+        /* Brush Divider */
+        .brush-section-divider {
+            height: 60px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 2rem !important;
+        }
+
+        .division-icon {
+            width: 100px !important;
+            height: 100px !important;
+        }
+
+        .division-icon img {
+            width: 80px !important;
+            height: 80px !important;
+        }
+    }
 </style>
 @endpush
 
@@ -476,62 +646,267 @@
         </div>
     </section>
 
-    <!-- Brush Divider -->
-    <div class="brush-section-divider">
-        <div class="brush-stroke-divider"></div>
-    </div>
-
-    <!-- MA Space - Breathing Section -->
-    <section class="ma-space">
-        <div class="ma-content">
-            <p class="ma-quote">"Belajar bahasa adalah belajar cara berpikir."</p>
-            <p class="ma-attribution">— 言葉の力</p>
+    <!-- Japanese Quote Section (Breathing Space with Meaning) -->
+    <section class="quote-section" style="padding: 5rem 1.5rem; background: linear-gradient(180deg, var(--neutral-50) 0%, var(--white) 100%); position: relative; overflow: hidden;">
+        <!-- Subtle Seigaiha Pattern -->
+        <div style="position: absolute; inset: 0; opacity: 0.04; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 40'%3E%3Cpath d='M0 40a40 40 0 0 1 40-40 40 40 0 0 1 40 40' fill='none' stroke='%23064E3B' stroke-width='1'/%3E%3C/svg%3E\"); background-size: 60px 30px;"></div>
+        
+        <div style="max-width: 800px; margin: 0 auto; text-align: center; position: relative;">
+            <!-- Japanese Quote -->
+            <p style="font-family: 'Shippori Mincho', serif; font-size: 1.5rem; color: var(--primary-700); opacity: 0.7; letter-spacing: 0.3em; margin-bottom: var(--space-md);">
+                「言葉は文化を運ぶ」
+            </p>
+            <p style="font-size: var(--text-lg); color: var(--neutral-600); font-style: italic; margin-bottom: var(--space-sm);">
+                "Bahasa membawa budaya"
+            </p>
+            <!-- Brush Underline -->
+            <div style="width: 60px; height: 3px; background: linear-gradient(90deg, transparent, var(--primary-400), transparent); margin: 0 auto; opacity: 0.6;"></div>
         </div>
     </section>
 
-    <!-- Brush Divider -->
-    <div class="brush-section-divider">
-        <div class="brush-stroke-divider"></div>
+    <!-- Micro Facts Section (BANZAI Identity) -->
+    <section style="padding: 3rem 1.5rem; background: var(--white);">
+        <div style="max-width: 900px; margin: 0 auto; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: var(--space-sm); color: var(--neutral-500); font-size: var(--text-sm);">
+                <span style="color: var(--primary-600); opacity: 0.7;">📍</span>
+                <span>SMKN 13 Bandung</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm); color: var(--neutral-500); font-size: var(--text-sm);">
+                <span style="color: var(--primary-600); opacity: 0.7;">📅</span>
+                <span>Berdiri sejak 2009</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm); color: var(--neutral-500); font-size: var(--text-sm);">
+                <span style="color: var(--primary-600); opacity: 0.7;">👥</span>
+                <span>3 Divisi Aktif</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm); color: var(--neutral-500); font-size: var(--text-sm);">
+                <span style="color: var(--primary-600); opacity: 0.7;">🇯🇵</span>
+                <span>Bahasa & Budaya Jepang</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Narrative Divider with Kanji -->
+    <div style="padding: 2rem 0; background: var(--white); text-align: center; position: relative;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-xl);">
+            <div style="width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--neutral-200));"></div>
+            <span style="font-family: 'Shippori Mincho', serif; font-size: 1.2rem; color: var(--primary-600); opacity: 0.4; letter-spacing: 0.2em;">学 · 和 · 心</span>
+            <div style="width: 80px; height: 1px; background: linear-gradient(90deg, var(--neutral-200), transparent);"></div>
+        </div>
     </div>
 
-    <!-- Divisions Section -->
-    <section class="divisions-section">
+    <!-- Divisions Section - Alternating Layout -->
+    <section class="divisions-section" style="background: white; padding: 5rem 1.5rem;">
         <div class="section-container">
-            <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <div class="section-header" style="text-align: center; margin-bottom: 4rem;">
                 <h2 class="section-title brush-underline" style="display: inline-block;">Tiga Dunia, Satu Keluarga</h2>
                 <p class="section-subtitle" style="margin: 1rem auto 0; max-width: 500px;">
                     Setiap divisi memiliki karakter dan jiwa yang berbeda, namun bersatu dalam semangat BANZAI.
                 </p>
             </div>
 
-            <div class="divisions-grid">
-                @forelse($divisions as $division)
-                    @php
-                        $logoMap = [
-                            'bahasa' => 'Bahasa-logo.png',
-                            'budaya' => 'Budaya-Logo.png',
-                            'medsos' => 'Medsos-Logo.png',
-                        ];
-                        $logoFile = $logoMap[$division->slug] ?? null;
-                    @endphp
-                    <div class="division-card" style="--card-color: {{ $division->color }}">
-                        <div class="division-icon" style="width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); background: linear-gradient(135deg, {{ $division->color }}10, {{ $division->color }}25); border-radius: var(--radius-full); border: 3px solid {{ $division->color }}30;">
-                            @if($logoFile)
-                                <img src="{{ asset('images/logo/' . $logoFile) }}" alt="{{ $division->name }}" style="width: 150px; height: 150px; object-fit: contain;">
-                            @else
-                                <span style="font-size: 4rem;">{{ $division->icon }}</span>
+            @php
+                $photoMap = [
+                    'bahasa' => 'divisions/Bahasa.jpeg',
+                    'budaya' => 'divisions/Budaya.jpeg',
+                    'medsos' => 'divisions/Medsos.jpeg',
+                ];
+                $koordinatorMap = [
+                    'bahasa' => ['name' => 'Bima Ksatria', 'class' => 'XII RPL 2', 'photo' => 'Kor.Bahasa.jpg'],
+                    'budaya' => ['name' => 'Razzan Ilman', 'class' => 'XII RPL 2', 'photo' => 'Kor.Budaya.jpg'],
+                    'medsos' => ['name' => 'Raihanisa', 'class' => 'XII KA 1', 'photo' => 'Kor.Medsos.jpg'],
+                ];
+                $divisionRoutes = [
+                    'bahasa' => 'division.bahasa',
+                    'budaya' => 'division.budaya',
+                    'medsos' => 'division.medsos',
+                ];
+            @endphp
+
+            @forelse($divisions as $index => $division)
+                @php
+                    $isEven = $index % 2 == 0;
+                    $photoFile = $photoMap[$division->slug] ?? null;
+                    $koordinator = $koordinatorMap[$division->slug] ?? null;
+                    $routeName = $divisionRoutes[$division->slug] ?? null;
+                @endphp
+
+                <!-- Division Row - Alternating -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 5rem; max-width: 1100px; margin-left: auto; margin-right: auto;">
+                    
+                    @if($isEven)
+                        <!-- Photo Left -->
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <div style="width: 350px; height: 350px; border-radius: 1.5rem; overflow: hidden; border: 3px solid {{ $division->color }}20; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); position: relative;">
+                                @if($photoFile)
+                                    <img src="{{ asset('images/' . $photoFile) }}" alt="{{ $division->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <!-- Color Overlay -->
+                                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, {{ $division->color }}10, transparent); pointer-events: none;"></div>
+                                @else
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, {{ $division->color }}10, {{ $division->color }}20);">
+                                        <span style="font-size: 6rem;">{{ $division->icon }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Content Right -->
+                        <div>
+                            <h3 style="font-size: 2rem; color: var(--ink-900); font-weight: 700; margin-bottom: 0.5rem;">{{ $division->name }}</h3>
+                            <p style="font-size: 1.1rem; color: {{ $division->color }}; font-weight: 600; margin-bottom: 1rem;">{{ $division->character }}</p>
+                            <p style="color: var(--ink-700); line-height: 1.8; margin-bottom: 1.5rem;">{{ $division->description }}</p>
+                            
+                            @if($koordinator)
+                                <!-- Coordinator Badge -->
+                                <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: linear-gradient(135deg, {{ $division->color }}05, {{ $division->color }}10); border-radius: 1rem; border: 1px solid {{ $division->color }}15; margin-bottom: 1.5rem;">
+                                    <img src="{{ asset('images/members/' . $koordinator['photo']) }}" alt="{{ $koordinator['name'] }}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid {{ $division->color }};">
+                                    <div>
+                                        <p style="font-size: 0.85rem; color: var(--ink-500); margin-bottom: 0.25rem;">Koordinator</p>
+                                        <p style="font-weight: 600; color: var(--ink-900); margin-bottom: 0.25rem;">{{ $koordinator['name'] }}</p>
+                                        <p style="font-size: 0.9rem; color: var(--ink-500);">{{ $koordinator['class'] }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($routeName)
+                                <a href="{{ route($routeName) }}" class="hover-lift" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, {{ $division->color }}, {{ $division->color }}dd); color: white; padding: 0.75rem 1.5rem; border-radius: 2rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none;">
+                                    Selengkapnya
+                                    <span style="font-size: 1.2rem;">→</span>
+                                </a>
                             @endif
                         </div>
-                        <h3 class="division-title">{{ $division->name }}</h3>
-                        <p class="division-character">{{ $division->character }}</p>
-                        <p class="division-description">{{ $division->description }}</p>
-                        <p class="division-tagline">"{{ $division->tagline }}"</p>
-                    </div>
-                @empty
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <p class="empty-state-text">Divisi sedang dipersiapkan...</p>
-                    </div>
-                @endforelse
+                    @else
+                        <!-- Content Left -->
+                        <div>
+                            <h3 style="font-size: 2rem; color: var(--ink-900); font-weight: 700; margin-bottom: 0.5rem;">{{ $division->name }}</h3>
+                            <p style="font-size: 1.1rem; color: {{ $division->color }}; font-weight: 600; margin-bottom: 1rem;">{{ $division->character }}</p>
+                            <p style="color: var(--ink-700); line-height: 1.8; margin-bottom: 1.5rem;">{{ $division->description }}</p>
+                            
+                            @if($koordinator)
+                                <!-- Coordinator Badge -->
+                                <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: linear-gradient(135deg, {{ $division->color }}05, {{ $division->color }}10); border-radius: 1rem; border: 1px solid {{ $division->color }}15; margin-bottom: 1.5rem;">
+                                    <img src="{{ asset('images/members/' . $koordinator['photo']) }}" alt="{{ $koordinator['name'] }}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid {{ $division->color }};">
+                                    <div>
+                                        <p style="font-size: 0.85rem; color: var(--ink-500); margin-bottom: 0.25rem;">Koordinator</p>
+                                        <p style="font-weight: 600; color: var(--ink-900); margin-bottom: 0.25rem;">{{ $koordinator['name'] }}</p>
+                                        <p style="font-size: 0.9rem; color: var(--ink-500);">{{ $koordinator['class'] }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($routeName)
+                                <a href="{{ route($routeName) }}" class="hover-lift" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, {{ $division->color }}, {{ $division->color }}dd); color: white; padding: 0.75rem 1.5rem; border-radius: 2rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none;">
+                                    Selengkapnya
+                                    <span style="font-size: 1.2rem;">→</span>
+                                </a>
+                            @endif
+                        </div>
+
+                        <!-- Photo Right -->
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <div style="width: 350px; height: 350px; border-radius: 1.5rem; overflow: hidden; border: 3px solid {{ $division->color }}20; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); position: relative;">
+                                @if($photoFile)
+                                    <img src="{{ asset('images/' . $photoFile) }}" alt="{{ $division->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <!-- Color Overlay -->
+                                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, {{ $division->color }}10, transparent); pointer-events: none;"></div>
+                                @else
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, {{ $division->color }}10, {{ $division->color }}20);">
+                                        <span style="font-size: 6rem;">{{ $division->icon }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            @empty
+                <div class="empty-state" style="text-align: center; padding: 3rem;">
+                    <p class="empty-state-text">Divisi sedang dipersiapkan...</p>
+                </div>
+            @endforelse
+        </div>
+    </section>
+
+    <!-- Achievement Highlights Section -->
+    <section style="background: linear-gradient(180deg, var(--ivory-100) 0%, var(--ivory-200) 100%); padding: 5rem 1.5rem; position: relative; overflow: hidden;">
+        <!-- Subtle Pattern -->
+        <div style="position: absolute; inset: 0; opacity: 0.03; background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L45 15L30 30L15 15Z' fill='none' stroke='%231E293B' stroke-width='0.5'/%3E%3C/svg%3E\"); background-size: 60px 60px;"></div>
+        
+        <div class="section-container" style="position: relative;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <p style="font-family: 'Shippori Mincho', serif; font-size: 1rem; color: var(--gold-600); letter-spacing: 0.3em; margin-bottom: 0.5rem; opacity: 0.8;">実績</p>
+                <h2 style="font-size: clamp(2rem, 5vw, 2.5rem); color: var(--ink-900); font-weight: 700; margin-bottom: 1rem;">Prestasi & Pencapaian</h2>
+                <p style="color: var(--ink-500); max-width: 600px; margin: 0 auto;">Dedikasi kami dalam mempelajari bahasa dan budaya Jepang telah menghasilkan berbagai pencapaian membanggakan.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                <!-- Achievement Card 1 -->
+                <div class="hover-lift" style="background: white; padding: 2rem; border-radius: 1rem; text-align: center; border: 1px solid rgba(30, 41, 59, 0.08); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, var(--gold-300), transparent); opacity: 0.2;"></div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                    <h3 style="font-size: 2.5rem; font-weight: 700; color: var(--gold-600); margin-bottom: 0.5rem;">15+</h3>
+                    <p style="color: var(--ink-700); font-weight: 600; margin-bottom: 0.5rem;">Tahun Berdiri</p>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Sejak 2009, konsisten membina generasi pencinta Jepang</p>
+                </div>
+
+                <!-- Achievement Card 2 -->
+                <div class="hover-lift" style="background: white; padding: 2rem; border-radius: 1rem; text-align: center; border: 1px solid rgba(30, 41, 59, 0.08); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, var(--plum-300), transparent); opacity: 0.2;"></div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+                    <h3 style="font-size: 2.5rem; font-weight: 700; color: var(--plum-700); margin-bottom: 0.5rem;">100+</h3>
+                    <p style="color: var(--ink-700); font-weight: 600; margin-bottom: 0.5rem;">Anggota Aktif</p>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Komunitas solid yang terus berkembang</p>
+                </div>
+
+                <!-- Achievement Card 3 -->
+                <div class="hover-lift" style="background: white; padding: 2rem; border-radius: 1rem; text-align: center; border: 1px solid rgba(30, 41, 59, 0.08); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, var(--bahasa-accent), transparent); opacity: 0.15;"></div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+                    <h3 style="font-size: 2.5rem; font-weight: 700; color: var(--bahasa-accent); margin-bottom: 0.5rem;">50+</h3>
+                    <p style="color: var(--ink-700); font-weight: 600; margin-bottom: 0.5rem;">Kegiatan Tahunan</p>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Workshop, festival, dan pembelajaran berkelanjutan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cultural Elements Showcase -->
+    <section style="background: white; padding: 5rem 1.5rem;">
+        <div class="section-container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <p style="font-family: 'Shippori Mincho', serif; font-size: 1rem; color: var(--plum-700); letter-spacing: 0.3em; margin-bottom: 0.5rem; opacity: 0.8;">文化</p>
+                <h2 style="font-size: clamp(2rem, 5vw, 2.5rem); color: var(--ink-900); font-weight: 700; margin-bottom: 1rem;">Yang Kami Pelajari</h2>
+                <p style="color: var(--ink-500); max-width: 600px; margin: 0 auto;">Lebih dari sekadar bahasa, kami menyelami kedalaman budaya Jepang.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+                <!-- Cultural Element 1 -->
+                <div style="text-align: center; padding: 1.5rem; transition: transform 0.3s ease;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; filter: grayscale(0.2);">🗾</div>
+                    <h4 style="color: var(--ink-800); font-weight: 600; margin-bottom: 0.5rem;">Bahasa</h4>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Hiragana, Katakana, Kanji, dan tata bahasa</p>
+                </div>
+
+                <!-- Cultural Element 2 -->
+                <div style="text-align: center; padding: 1.5rem; transition: transform 0.3s ease;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; filter: grayscale(0.2);">🎎</div>
+                    <h4 style="color: var(--ink-800); font-weight: 600; margin-bottom: 0.5rem;">Tradisi</h4>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Festival, upacara, dan adat istiadat</p>
+                </div>
+
+                <!-- Cultural Element 3 -->
+                <div style="text-align: center; padding: 1.5rem; transition: transform 0.3s ease;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; filter: grayscale(0.2);">🎨</div>
+                    <h4 style="color: var(--ink-800); font-weight: 600; margin-bottom: 0.5rem;">Seni</h4>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Kaligrafi, origami, dan kerajinan</p>
+                </div>
+
+                <!-- Cultural Element 4 -->
+                <div style="text-align: center; padding: 1.5rem; transition: transform 0.3s ease;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; filter: grayscale(0.2);">🍱</div>
+                    <h4 style="color: var(--ink-800); font-weight: 600; margin-bottom: 0.5rem;">Kuliner</h4>
+                    <p style="color: var(--ink-500); font-size: 0.9rem;">Makanan dan etika makan Jepang</p>
+                </div>
             </div>
         </div>
     </section>
@@ -565,9 +940,22 @@
     </section>
     @endif
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-content">
+    <!-- Narrative Divider Before CTA -->
+    <div style="padding: 3rem 0; background: var(--white); text-align: center;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-lg);">
+            <div style="width: 100px; height: 1px; background: linear-gradient(90deg, transparent, var(--neutral-300));"></div>
+            <span style="font-family: 'Shippori Mincho', serif; font-size: 1rem; color: var(--primary-600); opacity: 0.5;">仲間になろう</span>
+            <div style="width: 100px; height: 1px; background: linear-gradient(90deg, var(--neutral-300), transparent);"></div>
+        </div>
+    </div>
+
+    <!-- CTA Section (Enhanced with Japanese Pattern) -->
+    <section class="cta-section" style="position: relative; overflow: hidden;">
+        <!-- Subtle Asanoha Pattern -->
+        <div style="position: absolute; inset: 0; opacity: 0.05; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0L24 12L12 24L0 12Z' fill='none' stroke='%23FFFFFF' stroke-width='0.5'/%3E%3C/svg%3E\"); background-size: 30px 30px;"></div>
+        
+        <div class="cta-content" style="position: relative;">
+            <p style="font-family: 'Shippori Mincho', serif; font-size: 1.2rem; opacity: 0.6; letter-spacing: 0.2em; margin-bottom: var(--space-sm);">一緒に学ぼう</p>
             <h2 class="cta-title">Tertarik Bergabung?</h2>
             <p class="cta-desc">
                 Jadilah bagian dari keluarga BANZAI dan jelajahi keindahan bahasa serta budaya Jepang bersama kami.

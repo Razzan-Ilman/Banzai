@@ -1,0 +1,434 @@
+/**
+ * BANZAI MEMBER - LEVEL SYSTEM (1-3)
+ * 
+ * Konsep: Level = Representasi konsistensi & loyalitas
+ * - Level MENAMBAH, bukan mengganti
+ * - Progres visual bertahap dan elegan
+ * - Level 3 terasa istimewa & terhormat
+ * - UI tetap ringan dan nyaman
+ */
+
+/* ========================================
+   🟢 LEVEL 1 — INITIATE
+   Makna: Awal perjalanan
+   Karakter: Tenang, bersih, minim distraksi
+   ======================================== */
+
+[data-level="1"] {
+    /* Warna kelompok hanya sebagai aksen */
+    --level-intensity: 0.3;
+    --level-glow: none;
+    --level-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+[data-level="1"] .stat-card {
+    background: white;
+    border-left-width: 3px;
+    box-shadow: var(--level-shadow);
+    transition: all 0.3s ease;
+}
+
+[data-level="1"] .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-level="1"] .member-sidebar {
+    opacity: 0.95;
+}
+
+[data-level="1"] .btn-primary {
+    background: var(--group-primary);
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+
+[data-level="1"] .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* No decorative elements */
+[data-level="1"] .level-badge,
+[data-level="1"] .level-medal,
+[data-level="1"] .level-frame {
+    display: none;
+}
+
+/* ========================================
+   🔵 LEVEL 2 — ADEPT
+   Makna: Konsistensi & keterlibatan
+   Karakter: Lebih hidup, percaya diri
+   ======================================== */
+
+[data-level="2"] {
+    --level-intensity: 0.6;
+    --level-glow: 0 0 20px rgba(var(--group-primary-rgb), 0.15);
+    --level-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-level="2"] .stat-card {
+    background: white;
+    border-left-width: 4px;
+    box-shadow: var(--level-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-level="2"] .stat-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), var(--level-glow);
+}
+
+[data-level="2"] .member-sidebar {
+    opacity: 1;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+[data-level="2"] .btn-primary {
+    background: linear-gradient(135deg, var(--group-primary) 0%, var(--group-accent) 100%);
+    box-shadow: 0 4px 12px rgba(var(--group-primary-rgb), 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-level="2"] .btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(var(--group-primary-rgb), 0.3);
+}
+
+/* Profile card glow */
+[data-level="2"] .profile-card {
+    box-shadow: 0 0 20px rgba(var(--group-primary-rgb), 0.1);
+}
+
+/* Subtle symbol appearance */
+[data-level="2"] .group-symbol {
+    opacity: 0.15;
+    animation: symbolPulse 4s ease-in-out infinite;
+}
+
+@keyframes symbolPulse {
+
+    0%,
+    100% {
+        opacity: 0.15;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
+
+/* Level badge appears */
+[data-level="2"] .level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--group-primary), var(--group-accent));
+    color: white;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(var(--group-primary-rgb), 0.3);
+}
+
+/* ========================================
+   🟣 LEVEL 3 — MASTER
+   Makna: Kehormatan & loyalitas
+   Karakter: Berwibawa, elegan, eksklusif
+   ======================================== */
+
+[data-level="3"] {
+    --level-intensity: 1;
+    --level-glow: 0 0 30px rgba(var(--group-primary-rgb), 0.25);
+    --level-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+[data-level="3"] .stat-card {
+    background: linear-gradient(135deg, white 0%, rgba(var(--group-primary-rgb), 0.02) 100%);
+    border-left-width: 5px;
+    box-shadow: var(--level-shadow), var(--level-glow);
+    transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+}
+
+[data-level="3"] .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(var(--group-primary-rgb), 0.03) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+[data-level="3"] .stat-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 0 40px rgba(var(--group-primary-rgb), 0.3);
+}
+
+[data-level="3"] .member-sidebar {
+    opacity: 1;
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.12);
+}
+
+[data-level="3"] .btn-primary {
+    background: linear-gradient(135deg, var(--group-primary) 0%, var(--group-accent) 100%);
+    box-shadow: 0 6px 16px rgba(var(--group-primary-rgb), 0.3);
+    transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-level="3"] .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+[data-level="3"] .btn-primary:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+[data-level="3"] .btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(var(--group-primary-rgb), 0.4);
+}
+
+/* Profile card with frame */
+[data-level="3"] .profile-card {
+    box-shadow: 0 0 30px rgba(var(--group-primary-rgb), 0.2);
+    border: 2px solid rgba(var(--group-primary-rgb), 0.1);
+    position: relative;
+}
+
+[data-level="3"] .profile-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, var(--group-primary), var(--group-accent));
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+/* Symbol permanent & prominent */
+[data-level="3"] .group-symbol {
+    opacity: 0.3;
+    animation: symbolGlow 3s ease-in-out infinite;
+}
+
+@keyframes symbolGlow {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+}
+
+/* Level badge - enhanced */
+[data-level="3"] .level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background: linear-gradient(135deg, var(--group-primary), var(--group-accent));
+    color: white;
+    border-radius: 25px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(var(--group-primary-rgb), 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-level="3"] .level-badge::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: badgeShine 3s linear infinite;
+}
+
+@keyframes badgeShine {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+/* Medal display */
+[data-level="3"] .level-medal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--group-primary), var(--group-accent));
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(var(--group-primary-rgb), 0.4);
+    animation: medalFloat 4s ease-in-out infinite;
+    position: relative;
+}
+
+[data-level="3"] .level-medal::before {
+    content: '⭐';
+    font-size: 2rem;
+    animation: medalRotate 8s linear infinite;
+}
+
+@keyframes medalFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes medalRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Frame for special elements */
+[data-level="3"] .level-frame {
+    display: block;
+    border: 3px solid;
+    border-image: linear-gradient(135deg, var(--group-primary), var(--group-accent)) 1;
+    padding: 1.5rem;
+    position: relative;
+}
+
+[data-level="3"] .level-frame::before,
+[data-level="3"] .level-frame::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--group-primary);
+}
+
+[data-level="3"] .level-frame::before {
+    top: -3px;
+    left: -3px;
+    border-right: none;
+    border-bottom: none;
+}
+
+[data-level="3"] .level-frame::after {
+    bottom: -3px;
+    right: -3px;
+    border-left: none;
+    border-top: none;
+}
+
+/* ========================================
+   LEVEL TRANSITIONS
+   Smooth transitions between levels
+   ======================================== */
+
+.stat-card,
+.member-sidebar,
+.btn-primary,
+.profile-card {
+    transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    [data-level="3"] .level-medal {
+        width: 50px;
+        height: 50px;
+    }
+
+    [data-level="3"] .level-medal::before {
+        font-size: 1.5rem;
+    }
+
+    [data-level="2"] .group-symbol,
+    [data-level="3"] .group-symbol {
+        opacity: 0.1;
+        /* Reduce on mobile */
+    }
+}
+
+/* ========================================
+   LEVEL INDICATORS
+   Visual indicators for current level
+   ======================================== */
+
+.level-indicator {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.level-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(var(--group-primary-rgb), 0.2);
+    transition: all 0.3s ease;
+}
+
+[data-level="1"] .level-dot:nth-child(1),
+[data-level="2"] .level-dot:nth-child(1),
+[data-level="2"] .level-dot:nth-child(2),
+[data-level="3"] .level-dot {
+    background: var(--group-primary);
+    box-shadow: 0 0 10px rgba(var(--group-primary-rgb), 0.5);
+}
+
+/* ========================================
+   LEVEL TITLE/JULUKAN
+   ======================================== */
+
+.level-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--group-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+[data-level="3"] .level-title {
+    opacity: 1;
+    text-shadow: 0 2px 8px rgba(var(--group-primary-rgb), 0.2);
+}
