@@ -1,0 +1,373 @@
+/**
+ * BANZAI Dynamic Responsive CSS
+ * Styles yang menyesuaikan berdasarkan device class dari JavaScript
+ */
+
+/* ============================================
+   DEVICE-BASED BODY CLASSES
+   ============================================ */
+
+/* Mobile Small (< 480px) */
+body.mobile-small {
+    font-size: 13px;
+}
+
+body.mobile-small .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+/* Mobile (< 768px) */
+body.mobile {
+    font-size: 14px;
+}
+
+body.mobile .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Tablet (768px - 1024px) */
+body.tablet {
+    font-size: 15px;
+}
+
+/* Desktop (1024px - 1440px) */
+body.desktop {
+    font-size: 16px;
+}
+
+/* Wide (> 1440px) */
+body.wide {
+    font-size: 16px;
+}
+
+body.wide .container {
+    max-width: 1400px;
+}
+
+/* ============================================
+   ORIENTATION-BASED STYLES
+   ============================================ */
+
+body.portrait.mobile .stats-grid {
+    grid-template-columns: 1fr;
+}
+
+body.landscape.mobile .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ============================================
+   TOUCH VS NO-TOUCH STYLES
+   ============================================ */
+
+/* Touch devices - larger tap targets */
+body.touch-device button,
+body.touch-device .btn,
+body.touch-device a.nav-link {
+    min-height: 44px;
+}
+
+body.touch-device .nav-link {
+    padding: 0.875rem 1.5rem;
+}
+
+/* No hover effects on touch */
+body.touch-device .card:hover,
+body.touch-device .stat-card:hover {
+    transform: none;
+}
+
+/* No-touch - hover effects */
+body.no-touch .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+body.no-touch .stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+body.no-touch .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   DYNAMIC VIEWPORT UNITS
+   ============================================ */
+
+/* Use --vh for proper mobile height */
+.full-height {
+    height: calc(var(--vh, 1vh) * 100);
+}
+
+.min-full-height {
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+.hero-dynamic {
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* ============================================
+   SIDEBAR DYNAMIC STYLES
+   ============================================ */
+
+/* Sidebar - Desktop */
+body.desktop .member-sidebar,
+body.wide .member-sidebar,
+body.tablet .member-sidebar {
+    position: fixed;
+    left: 0;
+    width: 260px;
+}
+
+body.desktop .member-main,
+body.wide .member-main,
+body.tablet .member-main {
+    margin-left: 260px;
+}
+
+body.desktop .mobile-header,
+body.wide .mobile-header,
+body.tablet .mobile-header {
+    display: none !important;
+}
+
+/* Sidebar - Mobile */
+body.mobile .member-sidebar,
+body.mobile-small .member-sidebar {
+    position: fixed;
+    left: -280px;
+    width: 280px;
+    z-index: 1001;
+    transition: left 0.3s ease;
+}
+
+body.mobile .member-sidebar.active,
+body.mobile-small .member-sidebar.active {
+    left: 0;
+}
+
+body.mobile .member-main,
+body.mobile-small .member-main {
+    margin-left: 0;
+    padding-top: 60px;
+}
+
+body.mobile .mobile-header,
+body.mobile-small .mobile-header {
+    display: flex !important;
+}
+
+/* ============================================
+   RESPONSIVE GRIDS
+   ============================================ */
+
+/* Stats Grid */
+body.mobile-small .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+body.mobile .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+body.tablet .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+body.desktop .stats-grid,
+body.wide .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+/* Philosophy/Division Grid */
+body.mobile-small .philosophy-grid,
+body.mobile-small .divisions-grid {
+    grid-template-columns: 1fr;
+}
+
+body.mobile .philosophy-grid,
+body.mobile .divisions-grid {
+    grid-template-columns: 1fr;
+}
+
+body.tablet .philosophy-grid,
+body.tablet .divisions-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+body.desktop .philosophy-grid,
+body.desktop .divisions-grid,
+body.wide .philosophy-grid,
+body.wide .divisions-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
+body.mobile-small .hero-title {
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+}
+
+body.mobile .hero-title {
+    font-size: 2.5rem;
+    letter-spacing: 0.1em;
+}
+
+body.tablet .hero-title {
+    font-size: 4rem;
+    letter-spacing: 0.15em;
+}
+
+body.desktop .hero-title,
+body.wide .hero-title {
+    font-size: 6rem;
+    letter-spacing: 0.2em;
+}
+
+body.mobile-small .section-title,
+body.mobile-small .page-title {
+    font-size: 1.25rem;
+}
+
+body.mobile .section-title,
+body.mobile .page-title {
+    font-size: 1.5rem;
+}
+
+body.tablet .section-title,
+body.tablet .page-title {
+    font-size: 1.75rem;
+}
+
+body.desktop .section-title,
+body.desktop .page-title,
+body.wide .section-title,
+body.wide .page-title {
+    font-size: 2.25rem;
+}
+
+/* ============================================
+   RESPONSIVE CARDS
+   ============================================ */
+
+body.mobile-small .card-body {
+    padding: 0.75rem;
+}
+
+body.mobile .card-body {
+    padding: 1rem;
+}
+
+body.tablet .card-body {
+    padding: 1.25rem;
+}
+
+body.desktop .card-body,
+body.wide .card-body {
+    padding: 1.5rem;
+}
+
+/* ============================================
+   RESPONSIVE BUTTONS
+   ============================================ */
+
+body.mobile-small .btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+}
+
+body.mobile .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+}
+
+body.tablet .btn,
+body.desktop .btn,
+body.wide .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+}
+
+/* Full width buttons on mobile */
+body.mobile .btn-block-mobile,
+body.mobile-small .btn-block-mobile {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ============================================
+   QUIZ RESPONSIVE
+   ============================================ */
+
+body.mobile-small .quiz-container {
+    padding: 0.75rem;
+}
+
+body.mobile .quiz-container {
+    padding: 1rem;
+}
+
+body.mobile-small .question-card,
+body.mobile .question-card {
+    padding: 1rem;
+}
+
+body.mobile-small .option-label,
+body.mobile .option-label {
+    padding: 0.875rem;
+}
+
+body.mobile-small .traits-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+body.mobile .traits-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+body.tablet .traits-grid,
+body.desktop .traits-grid,
+body.wide .traits-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* ============================================
+   ANIMATION ADJUSTMENTS
+   ============================================ */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Simpler animations on mobile for performance */
+body.mobile .card:hover,
+body.mobile-small .card:hover {
+    transform: none;
+}
+
+body.mobile .light-orb,
+body.mobile-small .light-orb {
+    animation: none;
+}
+
+body.mobile .sparkle,
+body.mobile-small .sparkle {
+    display: none;
+}

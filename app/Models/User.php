@@ -21,6 +21,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'title_id',
+        'title_awarded_at',
     ];
 
     /**
@@ -43,10 +45,46 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'title_awarded_at' => 'datetime',
         ];
     }
 
-    // Member relationships
+    // ==================== TITLE RELATIONS ====================
+
+    /**
+     * Get user's current title
+     */
+    public function title()
+    {
+        return $this->belongsTo(Title::class);
+    }
+
+    /**
+     * Get user's title history
+     */
+    public function titleHistories()
+    {
+        return $this->hasMany(UserTitleHistory::class)->orderBy('awarded_at', 'desc');
+    }
+
+    /**
+     * Get user's quiz results
+     */
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class)->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Check if user has a title
+     */
+    public function hasTitle(): bool
+    {
+        return !is_null($this->title_id);
+    }
+
+    // ==================== MEMBER RELATIONS ====================
+
     public function memberProfile()
     {
         return $this->hasOne(MemberProfile::class);
@@ -61,8 +99,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(MemberGroupAssignment::class)
             ->where('is_active', true)
-            ->where('month_start', '<=', now())
-            ->where('month_end', '>=', now())
             ->with('group');
     }
 

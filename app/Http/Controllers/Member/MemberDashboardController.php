@@ -12,18 +12,16 @@ class MemberDashboardController extends Controller
     {
         $user = auth()->user();
         
-        // Load or create member profile
-        $profile = $user->memberProfile;
-        if (!$profile) {
-            // Auto-create profile for new members
-            $profile = \App\Models\MemberProfile::create([
-                'user_id' => $user->id,
-                'member_number' => 'BNZ-' . date('Y') . '-' . str_pad($user->id, 3, '0', STR_PAD_LEFT),
+        // Load or create member profile using firstOrCreate to avoid duplicates
+        $profile = \App\Models\MemberProfile::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'member_number' => 'BNZ-' . date('Y') . '-' . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT) . '-' . $user->id,
                 'level' => 1,
                 'points' => 0,
                 'xp' => 0,
-            ]);
-        }
+            ]
+        );
         
         // Get current group assignment
         $currentGroup = $user->currentGroup;

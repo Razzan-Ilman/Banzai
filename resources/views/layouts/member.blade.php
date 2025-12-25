@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="{{ asset('css/member-group-themes.css') }}">
     <link rel="stylesheet" href="{{ asset('css/member-level-system.css') }}">
     
+    <!-- Dynamic Responsive System -->
+    <link rel="stylesheet" href="{{ asset('css/dynamic-responsive.css') }}">
+    <script src="{{ asset('js/banzai-responsive.js') }}" defer></script>
+    
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -435,14 +439,161 @@
         .justify-between { justify-content: space-between; }
         .items-center { align-items: center; }
         .gap-4 { gap: 1rem; }
+        
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .member-sidebar {
+                position: fixed;
+                left: -280px;
+                width: 280px !important;
+                z-index: 1001;
+                transition: left 0.3s ease;
+            }
+            
+            .member-sidebar.active {
+                left: 0;
+            }
+            
+            .member-main {
+                margin-left: 0 !important;
+            }
+            
+            .member-topbar {
+                padding: 1rem !important;
+            }
+            
+            .topbar-title {
+                font-size: 1.25rem !important;
+            }
+            
+            .topbar-actions {
+                gap: 0.5rem !important;
+            }
+            
+            .member-content {
+                padding: 1rem !important;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+            }
+            
+            .stat-card {
+                padding: 1rem !important;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem !important;
+            }
+            
+            .card-body {
+                padding: 1rem !important;
+            }
+            
+            .mobile-header {
+                display: flex !important;
+            }
+            
+            .sidebar-backdrop {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+            }
+            
+            .sidebar-backdrop.active {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .topbar-title {
+                font-size: 1rem !important;
+            }
+            
+            .btn {
+                padding: 0.625rem 1rem !important;
+                font-size: 0.875rem !important;
+            }
+        }
+        
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, #0EA5E9, #0284C7);
+            z-index: 999;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .mobile-menu-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-btn span {
+            width: 20px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            letter-spacing: 0.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .member-main {
+                padding-top: 60px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <span class="mobile-logo">BANZAI</span>
+        <div style="width: 40px;"></div>
+    </div>
+    
+    <!-- Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+    
     <div class="member-layout" 
          data-group="{{ strtolower(str_replace('_', '-', auth()->user()->currentGroup->group->name ?? 'musashi')) }}" 
          data-level="{{ auth()->user()->memberProfile->level ?? 1 }}">
         <!-- SIDEBAR -->
-        <aside class="member-sidebar">
+        <aside class="member-sidebar" id="memberSidebar">
             <div class="sidebar-header">
                 <div class="user-avatar-large">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
                 <div class="user-name">{{ auth()->user()->name }}</div>
@@ -491,6 +642,49 @@
                     Absensi
                 </a>
                 
+                <a href="{{ route('member.quiz.index') }}" class="nav-link {{ request()->routeIs('member.quiz.*') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                    </svg>
+                    Quiz Kelompok
+                </a>
+                
+                <a href="{{ route('member.group.index') }}" class="nav-link {{ request()->routeIs('member.group.*') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Kelompok Saya
+                </a>
+                
+                <div class="nav-section">Belajar & Komunitas</div>
+                <a href="{{ route('member.analytics.index') }}" class="nav-link {{ request()->routeIs('member.analytics.*') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Statistik Saya
+                </a>
+                
+                <a href="{{ route('member.leaderboard.index') }}" class="nav-link {{ request()->routeIs('member.leaderboard.*') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                    Leaderboard
+                </a>
+                
+                <a href="{{ route('member.materials.index') }}" class="nav-link {{ request()->routeIs('member.materials.*') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    Materi Belajar
+                </a>
+                
+                <a href="{{ route('member.forum.index') }}" class="nav-link {{ request()->routeIs('member.forum.*') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                    </svg>
+                    Forum Diskusi
+                </a>
+                
                 <div class="nav-section">Lainnya</div>
                 <a href="{{ route('home') }}" class="nav-link" target="_blank">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -535,5 +729,37 @@
     
     <!-- Adaptive UI System -->
     <script src="{{ asset('js/member-adaptive-ui.js') }}"></script>
+    
+    <!-- Mobile Menu Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('memberSidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            
+            if (mobileMenuBtn && sidebar && backdrop) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                    backdrop.classList.toggle('active');
+                });
+                
+                backdrop.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    backdrop.classList.remove('active');
+                });
+                
+                // Close on nav link click (mobile)
+                const navLinks = sidebar.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                            backdrop.classList.remove('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -39,6 +39,34 @@
         margin: 0 auto;
     }
 
+    .score-info {
+        background: linear-gradient(135deg, #F0F9FF, #E0F7FA);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .score-info h3 {
+        margin: 0 0 0.5rem;
+        color: #0369A1;
+    }
+
+    .score-range {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .score-range-item {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
     .quiz-form {
         background: white;
         border-radius: 20px;
@@ -55,12 +83,6 @@
         animation: fadeInUp 0.6s ease;
         animation-fill-mode: both;
     }
-
-    .question-card:nth-child(1) { animation-delay: 0.1s; }
-    .question-card:nth-child(2) { animation-delay: 0.15s; }
-    .question-card:nth-child(3) { animation-delay: 0.2s; }
-    .question-card:nth-child(4) { animation-delay: 0.25s; }
-    .question-card:nth-child(5) { animation-delay: 0.3s; }
 
     .question-number {
         display: inline-flex;
@@ -113,19 +135,19 @@
         cursor: pointer;
     }
 
-    .option-label input[type="radio"]:checked ~ .option-content {
-        color: #0EA5E9;
-        font-weight: 600;
-    }
-
-    .option-label input[type="radio"]:checked ~ .option-indicator {
+    .option-label input[type="radio"]:checked + .option-indicator {
         background: linear-gradient(135deg, #0EA5E9, #06B6D4);
         border-color: #0EA5E9;
     }
 
-    .option-label input[type="radio"]:checked ~ .option-indicator::after {
+    .option-label input[type="radio"]:checked + .option-indicator::after {
         opacity: 1;
         transform: scale(1);
+    }
+
+    .option-label input[type="radio"]:checked ~ .option-content {
+        color: #0EA5E9;
+        font-weight: 600;
     }
 
     .option-indicator {
@@ -150,20 +172,6 @@
         opacity: 0;
         transform: scale(0);
         transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    .option-letter {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        background: #F1F5F9;
-        color: #64748B;
-        border-radius: 6px;
-        font-weight: 700;
-        font-size: 0.875rem;
-        margin-right: 1rem;
     }
 
     .option-content {
@@ -202,10 +210,6 @@
         box-shadow: 0 12px 32px rgba(14, 165, 233, 0.4);
     }
 
-    .btn-submit:active {
-        transform: translateY(-1px) scale(0.98);
-    }
-
     .progress-bar {
         position: fixed;
         top: 0;
@@ -218,51 +222,13 @@
     }
 
     @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .quiz-container {
-            padding: 1rem;
-        }
-
-        .quiz-header h1 {
-            font-size: 2rem;
-        }
-
-        .quiz-header .kanji {
-            font-size: 2.5rem;
-        }
-
-        .quiz-form {
-            padding: 1.5rem;
-        }
-
-        .question-card {
-            padding: 1.5rem;
-        }
-
-        .option-label {
-            padding: 1rem;
-        }
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 
@@ -271,30 +237,40 @@
 <div class="quiz-container">
     <div class="quiz-header">
         <div class="kanji">問</div>
-        <h1>Quiz Kelompok BANZAI</h1>
-        <p>Jawab 10 pertanyaan ini untuk mengetahui kelompok Jepang yang sesuai dengan karaktermu. Tidak ada jawaban benar atau salah, pilih yang paling menggambarkan dirimu.</p>
+        <h1>Quiz Kepribadian BANZAI</h1>
+        <p>Jawab 10 pertanyaan ini untuk mengetahui kelompok Jepang yang sesuai dengan kepribadianmu. Pilih jawaban yang paling menggambarkan dirimu!</p>
+    </div>
+
+    <div class="score-info">
+        <h3>🎯 Sistem Penilaian</h3>
+        <p>Setiap jawaban memiliki bobot 1-4 poin. Total skormu akan menentukan kelompok:</p>
+        <div class="score-range">
+            <span class="score-range-item" style="background: #EEF2FF; color: #4F46E5;">10-17: MUSASHI</span>
+            <span class="score-range-item" style="background: #FCE7F3; color: #DB2777;">18-25: AME-NO-UZUME</span>
+            <span class="score-range-item" style="background: #D1FAE5; color: #059669;">26-33: FUJIN</span>
+            <span class="score-range-item" style="background: #FEF3C7; color: #D97706;">34-40: YAMATO</span>
+        </div>
     </div>
 
     <form action="{{ route('member.quiz.submit') }}" method="POST" id="quizForm" class="quiz-form">
         @csrf
 
         @foreach($questions as $index => $question)
-        <div class="question-card">
+        <div class="question-card" style="animation-delay: {{ $index * 0.05 }}s;">
             <div class="question-number">{{ $index + 1 }}</div>
             <div class="question-text">{{ $question['question'] }}</div>
             
             <div class="options-grid">
-                @foreach($question['options'] as $letter => $option)
+                @foreach($question['options'] as $optIndex => $option)
                 <label class="option-label">
                     <input 
                         type="radio" 
                         name="answers[{{ $index }}]" 
-                        value="{{ $letter }}" 
+                        value="{{ $option['score'] }}" 
                         required
                         onchange="updateProgress()"
                     >
                     <div class="option-indicator"></div>
-                    <div class="option-letter">{{ $letter }}</div>
                     <div class="option-content">{{ $option['text'] }}</div>
                 </label>
                 @endforeach
@@ -323,18 +299,6 @@ function updateProgress() {
     document.getElementById('progressBar').style.width = progress + '%';
 }
 
-// Prevent accidental page leave
-window.addEventListener('beforeunload', function (e) {
-    const form = document.getElementById('quizForm');
-    const answeredQuestions = form.querySelectorAll('input[type="radio"]:checked').length;
-    
-    if (answeredQuestions > 0 && answeredQuestions < {{ count($questions) }}) {
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
-
-// Form validation
 document.getElementById('quizForm').addEventListener('submit', function(e) {
     const totalQuestions = {{ count($questions) }};
     const answeredQuestions = this.querySelectorAll('input[type="radio"]:checked').length;
@@ -342,13 +306,6 @@ document.getElementById('quizForm').addEventListener('submit', function(e) {
     if (answeredQuestions < totalQuestions) {
         e.preventDefault();
         alert('Mohon jawab semua pertanyaan sebelum submit!');
-        
-        // Scroll to first unanswered question
-        const firstUnanswered = this.querySelector('.question-card:not(:has(input:checked))');
-        if (firstUnanswered) {
-            firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstUnanswered.style.animation = 'shake 0.5s';
-        }
     }
 });
 </script>

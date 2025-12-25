@@ -4,7 +4,27 @@
 
 @section('content')
     <div class="flex justify-between items-center mb-6">
-        <h2 style="font-size: 1.25rem; font-weight: 600;">Daftar Anggota</h2>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 600;">Daftar Anggota</h2>
+            {{-- Status Filter --}}
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="{{ route('admin.members.index', ['status' => 'active']) }}" 
+                   class="btn btn-sm" 
+                   style="{{ $status === 'active' ? 'background: var(--primary-700); color: white;' : 'background: #E5E5E5;' }}">
+                    Aktif
+                </a>
+                <a href="{{ route('admin.members.index', ['status' => 'alumni']) }}" 
+                   class="btn btn-sm" 
+                   style="{{ $status === 'alumni' ? 'background: var(--primary-700); color: white;' : 'background: #E5E5E5;' }}">
+                    Alumni
+                </a>
+                <a href="{{ route('admin.members.index', ['status' => 'all']) }}" 
+                   class="btn btn-sm" 
+                   style="{{ $status === 'all' ? 'background: var(--primary-700); color: white;' : 'background: #E5E5E5;' }}">
+                    Semua
+                </a>
+            </div>
+        </div>
         <a href="{{ route('admin.members.create') }}" class="btn btn-primary">+ Tambah Anggota</a>
     </div>
 
@@ -36,10 +56,12 @@
                                 </td>
                                 <td>{{ $member->class }}</td>
                                 <td>{{ $member->major }}</td>
-                                <td>{{ $member->position ?? '-' }}</td>
+                                <td>{{ $member->display_position ?? '-' }}</td>
                                 <td>{{ $member->division?->name ?? '-' }}</td>
                                 <td>
-                                    @if($member->is_active)
+                                    @if($member->status === 'alumni')
+                                        <span class="badge" style="background: #E5E5E5; color: #404040;">Alumni</span>
+                                    @elseif($member->is_active)
                                         <span class="badge badge-approved">Aktif</span>
                                     @else
                                         <span class="badge badge-pending">Nonaktif</span>
@@ -48,6 +70,9 @@
                                 <td>
                                     <div style="display: flex; gap: 0.5rem;">
                                         <a href="{{ route('admin.members.edit', $member) }}" class="btn btn-sm" style="background: #E5E5E5;">Edit</a>
+                                        @if($member->status === 'active')
+                                            <a href="{{ route('admin.members.replace', $member) }}" class="btn btn-sm" style="background: #FEF3C7; color: #92400E;">Ganti</a>
+                                        @endif
                                         <form action="{{ route('admin.members.destroy', $member) }}" method="POST" onsubmit="return confirm('Hapus anggota ini?')">
                                             @csrf
                                             @method('DELETE')
@@ -70,6 +95,7 @@
     </div>
 
     <div style="margin-top: 1rem;">
-        {{ $members->links() }}
+        {{ $members->appends(['status' => $status])->links() }}
     </div>
 @endsection
+

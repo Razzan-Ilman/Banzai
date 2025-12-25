@@ -3,355 +3,437 @@
 @section('title', 'Hasil Quiz')
 
 @section('content')
-<style>
-    .result-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-        min-height: 80vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+@php
+    // Theme configuration per group
+    $groupThemes = [
+        'MUSASHI' => [
+            'primary' => '#4F46E5',      // Indigo
+            'secondary' => '#6366F1',
+            'accent' => '#A5B4FC',
+            'bg_gradient' => 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #312E81 100%)',
+            'pattern' => 'katana',        // Pattern style
+            'icon' => '⚔️',
+            'quote' => '"剣を極める者、心も極める"',
+            'quote_en' => 'Master the sword, master the mind',
+        ],
+        'AME-NO-UZUME' => [
+            'primary' => '#EC4899',      // Pink
+            'secondary' => '#F472B6',
+            'accent' => '#FBCFE8',
+            'bg_gradient' => 'linear-gradient(135deg, #EC4899 0%, #A855F7 50%, #7C3AED 100%)',
+            'pattern' => 'sakura',
+            'icon' => '🌸',
+            'quote' => '"踊りは魂の言葉"',
+            'quote_en' => 'Dance is the language of the soul',
+        ],
+        'FUJIN' => [
+            'primary' => '#10B981',      // Emerald
+            'secondary' => '#34D399',
+            'accent' => '#A7F3D0',
+            'bg_gradient' => 'linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #0EA5E9 100%)',
+            'pattern' => 'wind',
+            'icon' => '🌀',
+            'quote' => '"風のように自由に"',
+            'quote_en' => 'Free as the wind',
+        ],
+        'YAMATO' => [
+            'primary' => '#F59E0B',      // Amber
+            'secondary' => '#FBBF24',
+            'accent' => '#FDE68A',
+            'bg_gradient' => 'linear-gradient(135deg, #F59E0B 0%, #EF4444 50%, #DC2626 100%)',
+            'pattern' => 'sun',
+            'icon' => '☀️',
+            'quote' => '"和を以て貴しとなす"',
+            'quote_en' => 'Harmony is the greatest virtue',
+        ],
+    ];
 
-    .result-card {
-        background: white;
-        border-radius: 24px;
-        padding: 3rem;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-        text-align: center;
-        animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    $groupDescriptions = [
+        'MUSASHI' => [
+            'title' => 'The Strategist',
+            'traits' => ['Analitis', 'Terstruktur', 'Perfeksionis', 'Fokus'],
+            'description' => 'Seperti Musashi sang pendekar legendaris, kamu memiliki kecerdasan strategis dan dedikasi untuk menguasai setiap skill hingga sempurna.',
+        ],
+        'AME-NO-UZUME' => [
+            'title' => 'The Creator',
+            'traits' => ['Kreatif', 'Ekspresif', 'Artistik', 'Inspiratif'],
+            'description' => 'Seperti Dewi Tari yang membawa kegembiraan, kamu memiliki jiwa seni yang dapat menginspirasi dan mencerahkan orang di sekitarmu.',
+        ],
+        'FUJIN' => [
+            'title' => 'The Adventurer',
+            'traits' => ['Dinamis', 'Adaptif', 'Energetik', 'Cepat'],
+            'description' => 'Seperti Dewa Angin yang tak terbatas, kamu memiliki semangat petualangan dan kemampuan beradaptasi yang luar biasa.',
+        ],
+        'YAMATO' => [
+            'title' => 'The Harmonizer',
+            'traits' => ['Harmonis', 'Kolaboratif', 'Supportif', 'Bijaksana'],
+            'description' => 'Seperti Semangat Yamato yang menyatukan, kamu adalah kekuatan pemersatu yang menjaga kebersamaan dan harmoni.',
+        ],
+    ];
+
+    $groupName = $quizResult->group->name;
+    $theme = $groupThemes[$groupName] ?? $groupThemes['YAMATO'];
+    $info = $groupDescriptions[$groupName] ?? $groupDescriptions['YAMATO'];
+@endphp
+
+<style>
+    .result-wrapper {
+        min-height: 100vh;
+        padding: 2rem;
+        background: {{ $theme['bg_gradient'] }};
         position: relative;
         overflow: hidden;
     }
 
-    .result-card::before {
+    /* MUSASHI Pattern - Katana Lines */
+    @if($theme['pattern'] === 'katana')
+    .result-wrapper::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 6px;
-        background: linear-gradient(90deg, 
-            {{ $quizResult->group->color }}, 
-            {{ $quizResult->group->color }}88
-        );
+        bottom: 0;
+        background: 
+            repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(255,255,255,0.03) 50px, rgba(255,255,255,0.03) 51px),
+            repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(255,255,255,0.03) 50px, rgba(255,255,255,0.03) 51px);
+        pointer-events: none;
+    }
+    @endif
+
+    /* AME-NO-UZUME Pattern - Sakura Petals */
+    @if($theme['pattern'] === 'sakura')
+    .result-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 30%),
+            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 25%),
+            radial-gradient(circle at 50% 10%, rgba(255,255,255,0.08) 0%, transparent 20%),
+            radial-gradient(circle at 10% 80%, rgba(255,255,255,0.08) 0%, transparent 25%);
+        pointer-events: none;
+    }
+    @endif
+
+    /* FUJIN Pattern - Wind Swirls */
+    @if($theme['pattern'] === 'wind')
+    .result-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(255,255,255,0.05) 100px, rgba(255,255,255,0.05) 102px),
+            repeating-linear-gradient(45deg, transparent, transparent 80px, rgba(255,255,255,0.03) 80px, rgba(255,255,255,0.03) 82px);
+        animation: windMove 20s linear infinite;
+        pointer-events: none;
+    }
+    @keyframes windMove {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(100px); }
+    }
+    @endif
+
+    /* YAMATO Pattern - Sun Rays */
+    @if($theme['pattern'] === 'sun')
+    .result-wrapper::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200%;
+        height: 200%;
+        background: 
+            conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.05) 10deg, transparent 20deg);
+        animation: sunRotate 60s linear infinite;
+        pointer-events: none;
+    }
+    @keyframes sunRotate {
+        0% { transform: translateX(-50%) rotate(0deg); }
+        100% { transform: translateX(-50%) rotate(360deg); }
+    }
+    @endif
+
+    .result-container {
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
     }
 
-    .result-icon {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto 2rem;
-        background: linear-gradient(135deg, 
-            {{ $quizResult->group->color }}, 
-            {{ $quizResult->group->color }}CC
-        );
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s both;
-        box-shadow: 0 12px 32px {{ $quizResult->group->color }}40;
+    .result-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 32px;
+        padding: 3rem;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        animation: cardAppear 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
-    .result-kanji {
-        font-family: 'Noto Sans JP', serif;
+    @keyframes cardAppear {
+        0% { opacity: 0; transform: scale(0.8) translateY(50px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .group-icon {
         font-size: 5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, 
-            {{ $quizResult->group->color }}, 
-            {{ $quizResult->group->color }}88
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
         margin-bottom: 1rem;
-        animation: fadeInDown 0.6s ease 0.5s both;
+        animation: iconPulse 2s ease infinite;
     }
 
-    .result-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #0F172A;
+    @keyframes iconPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .group-kanji {
+        font-family: 'Noto Sans JP', serif;
+        font-size: 4rem;
+        font-weight: 900;
+        color: {{ $theme['primary'] }};
         margin-bottom: 0.5rem;
-        animation: fadeInUp 0.6s ease 0.6s both;
+        text-shadow: 2px 2px 0 {{ $theme['accent'] }};
     }
 
-    .result-subtitle {
+    .group-name {
+        font-size: 2rem;
+        font-weight: 800;
+        color: {{ $theme['primary'] }};
+        letter-spacing: 0.1em;
+        margin-bottom: 0.25rem;
+    }
+
+    .group-title {
         font-size: 1.25rem;
-        color: #64748B;
-        margin-bottom: 2rem;
-        animation: fadeInUp 0.6s ease 0.7s both;
+        color: {{ $theme['secondary'] }};
+        font-weight: 600;
+        margin-bottom: 1.5rem;
     }
 
-    .result-description {
-        font-size: 1.125rem;
-        line-height: 1.8;
-        color: #334155;
-        margin-bottom: 2.5rem;
-        padding: 2rem;
-        background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
-        border-radius: 16px;
-        border-left: 4px solid {{ $quizResult->group->color }};
-        animation: fadeInUp 0.6s ease 0.8s both;
-    }
-
-    .result-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.5rem;
-        animation: fadeInUp 0.6s ease 0.9s both;
-    }
-
-    .stat-item {
-        padding: 1.5rem;
-        background: white;
-        border: 2px solid #E2E8F0;
+    .quote-box {
+        background: linear-gradient(135deg, {{ $theme['primary'] }}15, {{ $theme['secondary'] }}15);
+        border-left: 4px solid {{ $theme['primary'] }};
+        padding: 1.25rem;
         border-radius: 12px;
-        transition: all 0.3s ease;
+        margin: 1.5rem 0;
+        text-align: left;
     }
 
-    .stat-item:hover {
-        border-color: {{ $quizResult->group->color }};
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px {{ $quizResult->group->color }}20;
-    }
-
-    .stat-label {
-        font-size: 0.875rem;
-        color: #64748B;
+    .quote-jp {
+        font-family: 'Noto Sans JP', serif;
+        font-size: 1.25rem;
+        color: {{ $theme['primary'] }};
         margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
-    .stat-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: {{ $quizResult->group->color }};
+    .quote-en {
+        font-size: 0.875rem;
+        color: #6B7280;
+        font-style: italic;
     }
 
-    .level-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, 
-            {{ $quizResult->group->color }}, 
-            {{ $quizResult->group->color }}CC
-        );
-        color: white;
+    .traits-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+    }
+
+    .trait-badge {
+        background: {{ $theme['primary'] }}15;
+        color: {{ $theme['primary'] }};
+        padding: 0.5rem 0.75rem;
         border-radius: 50px;
-        font-weight: 700;
-        font-size: 1rem;
-        margin-bottom: 2rem;
-        animation: fadeInUp 0.6s ease 1s both;
-        box-shadow: 0 4px 16px {{ $quizResult->group->color }}40;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid {{ $theme['primary'] }}30;
     }
 
-    .btn-dashboard {
+    .description-text {
+        color: #4B5563;
+        line-height: 1.8;
+        font-size: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .score-section {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: #F9FAFB;
+        border-radius: 16px;
+    }
+
+    .score-item {
+        text-align: center;
+    }
+
+    .score-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: {{ $theme['primary'] }};
+    }
+
+    .score-label {
+        font-size: 0.75rem;
+        color: #6B7280;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .borderline-alert {
+        background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+        color: #92400E;
+        padding: 1rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+        font-weight: 500;
+    }
+
+    .title-celebration {
+        background: linear-gradient(135deg, {{ $theme['primary'] }}, {{ $theme['secondary'] }});
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        margin: 2rem 0;
+        animation: titleGlow 2s ease infinite;
+    }
+
+    @keyframes titleGlow {
+        0%, 100% { box-shadow: 0 0 30px {{ $theme['primary'] }}50; }
+        50% { box-shadow: 0 0 50px {{ $theme['primary'] }}80; }
+    }
+
+    .title-kanji {
+        font-family: 'Noto Sans JP', serif;
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .consistency-bar {
+        background: #E5E7EB;
+        border-radius: 50px;
+        height: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+
+    .consistency-fill {
+        background: linear-gradient(90deg, {{ $theme['primary'] }}, {{ $theme['secondary'] }});
+        height: 100%;
+        border-radius: 50px;
+        transition: width 1s ease;
+    }
+
+    .btn-back {
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
-        padding: 1.25rem 3rem;
-        background: linear-gradient(135deg, 
-            {{ $quizResult->group->color }}, 
-            {{ $quizResult->group->color }}CC
-        );
+        padding: 1rem 2.5rem;
+        background: {{ $theme['primary'] }};
         color: white;
-        border: none;
         border-radius: 50px;
-        font-size: 1.125rem;
-        font-weight: 700;
         text-decoration: none;
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 24px {{ $quizResult->group->color }}40;
-        animation: fadeInUp 0.6s ease 1.1s both;
+        font-weight: 600;
+        margin-top: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px {{ $theme['primary'] }}40;
     }
 
-    .btn-dashboard:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 12px 32px {{ $quizResult->group->color }}60;
+    .btn-back:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px {{ $theme['primary'] }}60;
     }
 
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: {{ $quizResult->group->color }};
-        position: absolute;
-        animation: confetti-fall 3s linear infinite;
-    }
-
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    @keyframes bounceIn {
-        0% {
-            opacity: 0;
-            transform: scale(0);
-        }
-        50% {
-            transform: scale(1.1);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes confetti-fall {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .result-container {
-            padding: 1rem;
-        }
-
-        .result-card {
-            padding: 2rem 1.5rem;
-        }
-
-        .result-kanji {
-            font-size: 3.5rem;
-        }
-
-        .result-title {
-            font-size: 2rem;
-        }
-
-        .result-stats {
-            grid-template-columns: 1fr;
-        }
+    @media (max-width: 640px) {
+        .result-wrapper { padding: 1rem; }
+        .result-card { padding: 2rem 1.5rem; }
+        .group-kanji { font-size: 3rem; }
+        .traits-grid { grid-template-columns: repeat(2, 1fr); }
+        .score-section { flex-direction: column; gap: 1rem; }
     }
 </style>
 
-<div class="result-container">
-    <div class="result-card">
-        <div class="result-icon">
-            @if($quizResult->group->name === 'MUSASHI')
-                🥋
-            @elseif($quizResult->group->name === 'AME-NO-UZUME')
-                🌸
-            @elseif($quizResult->group->name === 'FUJIN')
-                🌪️
-            @else
-                🏯
+<div class="result-wrapper">
+    <div class="result-container">
+        <div class="result-card">
+            <div class="group-icon">{{ $theme['icon'] }}</div>
+            <div class="group-kanji">{{ $quizResult->group->kanji ?? '?' }}</div>
+            <div class="group-name">{{ $groupName }}</div>
+            <div class="group-title">{{ $info['title'] }}</div>
+
+            <div class="quote-box">
+                <div class="quote-jp">{{ $theme['quote'] }}</div>
+                <div class="quote-en">{{ $theme['quote_en'] }}</div>
+            </div>
+
+            <div class="traits-grid">
+                @foreach($info['traits'] as $trait)
+                    <span class="trait-badge">{{ $trait }}</span>
+                @endforeach
+            </div>
+
+            <p class="description-text">{{ $info['description'] }}</p>
+
+            <div class="score-section">
+                <div class="score-item">
+                    <div class="score-value">{{ $quizResult->total_score }}</div>
+                    <div class="score-label">Skor Total</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value">{{ $scoreStats['percentage'] }}%</div>
+                    <div class="score-label">Persentase</div>
+                </div>
+            </div>
+
+            @if($quizResult->is_borderline)
+                <div class="borderline-alert">
+                    ⚠️ Hasil Borderline - Kamu berada di perbatasan dua kelompok!
+                </div>
             @endif
+
+            @if($titleResult['awarded'] ?? false)
+                <div class="title-celebration">
+                    <h3 style="margin: 0 0 0.5rem; font-size: 1.25rem;">🎊 Selamat! Kamu Mendapat Title!</h3>
+                    <div class="title-kanji">{{ $titleResult['title']->name_kanji }}</div>
+                    <p style="margin: 0; font-weight: 600;">{{ $titleResult['title']->name }}</p>
+                </div>
+            @elseif(auth()->user()->hasTitle())
+                <div style="background: {{ $theme['primary'] }}15; padding: 1rem; border-radius: 12px; margin: 1rem 0;">
+                    <p style="margin: 0;">🏆 Title Aktif: <strong>{{ auth()->user()->title->display_name }}</strong></p>
+                </div>
+            @endif
+
+            <div style="margin-top: 2rem;">
+                <div style="font-weight: 600; color: {{ $theme['primary'] }}; margin-bottom: 0.5rem;">
+                    Progress Title ({{ $consistency['progress'] }})
+                </div>
+                @php
+                    $progressParts = explode('/', $consistency['progress']);
+                    $progressPercent = (intval($progressParts[0]) / intval($progressParts[1])) * 100;
+                @endphp
+                <div class="consistency-bar">
+                    <div class="consistency-fill" style="width: {{ $progressPercent }}%;"></div>
+                </div>
+                <p style="font-size: 0.875rem; color: #6B7280; margin: 0.5rem 0 0;">
+                    Dapatkan kelompok sama 3 dari 4 bulan untuk title!
+                </p>
+            </div>
+
+            <a href="{{ route('member.dashboard') }}" class="btn-back">
+                ← Kembali ke Dashboard
+            </a>
         </div>
-
-        <div class="result-kanji">{{ $quizResult->group->kanji }}</div>
-        <h1 class="result-title">{{ $quizResult->group->name }}</h1>
-        <p class="result-subtitle">Kelompok Jepangmu</p>
-
-        @if($quizResult->is_same_as_previous)
-            <div class="level-badge">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-                <span>Level {{ auth()->user()->memberProfile->level }} - 
-                    @if(auth()->user()->memberProfile->level === 1)
-                        Initiate
-                    @elseif(auth()->user()->memberProfile->level === 2)
-                        Adept
-                    @else
-                        Master
-                    @endif
-                </span>
-            </div>
-        @else
-            <div class="level-badge">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
-                </svg>
-                <span>Level 1 - Initiate (Kelompok Baru!)</span>
-            </div>
-        @endif
-
-        <div class="result-description">
-            {{ $quizResult->group->description }}
-        </div>
-
-        <div class="result-stats">
-            <div class="stat-item">
-                <div class="stat-label">Bulan</div>
-                <div class="stat-value">{{ now()->format('M Y') }}</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Level</div>
-                <div class="stat-value">{{ auth()->user()->memberProfile->level }}</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Points</div>
-                <div class="stat-value">{{ auth()->user()->memberProfile->points }}</div>
-            </div>
-        </div>
-
-        <a href="{{ route('member.dashboard') }}" class="btn-dashboard">
-            <span>Lihat Dashboard Barumu</span>
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-        </a>
     </div>
 </div>
-
-<script>
-// Create confetti effect
-function createConfetti() {
-    const colors = ['{{ $quizResult->group->color }}', '{{ $quizResult->group->color }}88', '{{ $quizResult->group->color }}CC'];
-    
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => confetti.remove(), 5000);
-        }, i * 30);
-    }
-}
-
-// Trigger confetti on load
-window.addEventListener('load', createConfetti);
-</script>
 @endsection

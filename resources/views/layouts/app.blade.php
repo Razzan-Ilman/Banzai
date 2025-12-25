@@ -18,6 +18,13 @@
     <link rel="stylesheet" href="{{ asset('css/foundation.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
     
+    <!-- Mobile Responsive -->
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dynamic-responsive.css') }}">
+    
+    <!-- Responsive System JS (early load for device detection) -->
+    <script src="{{ asset('js/banzai-responsive.js') }}" defer></script>
+    
     <!-- Phase 9: No-JS Fallback -->
     <noscript>
         <link rel="stylesheet" href="{{ asset('css/no-js.css') }}">

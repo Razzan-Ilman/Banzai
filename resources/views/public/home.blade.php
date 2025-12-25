@@ -4,50 +4,104 @@
 
 @push('styles')
 <style>
-    /* ===== HERO - FIRST BREATH (Digital Cultural Space) ===== */
+    /* ===== HERO - WARM GLOWING ATMOSPHERE ===== */
     .hero {
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        background: linear-gradient(160deg, var(--indigo-900) 0%, var(--indigo-800) 100%);
-        background-size: 200% 200%;
+        background: linear-gradient(135deg, 
+            #1a1a2e 0%, 
+            #16213e 30%, 
+            #0f3460 60%,
+            #1a1a2e 100%);
         overflow: hidden;
     }
 
-    /* Living Background - Slow Gradient Drift (45s loop) */
+    /* Warm Animated Gradient Overlay */
     .hero::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(160deg, 
-            var(--indigo-900) 0%, 
-            #2D3E50 40%, 
-            var(--indigo-800) 100%);
-        background-size: 200% 200%;
-        animation: gradientDrift 45s ease-in-out infinite;
-        opacity: 0.9;
+        background: 
+            radial-gradient(ellipse 80% 50% at 50% 120%, rgba(251, 146, 60, 0.3) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 70% 10%, rgba(244, 114, 182, 0.2) 0%, transparent 40%),
+            radial-gradient(ellipse 50% 50% at 20% 60%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+        animation: warmGlow 8s ease-in-out infinite alternate;
     }
 
-    @keyframes gradientDrift {
-        0%, 100% { 
-            background-position: 0% 50%;
-        }
-        50% { 
-            background-position: 100% 50%;
-        }
+    @keyframes warmGlow {
+        0% { opacity: 0.8; transform: scale(1); }
+        100% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Washi Texture - 4% opacity, blur halus */
-    .hero::after {
-        content: '';
+    /* Floating Light Orbs */
+    .light-orb {
         position: absolute;
-        inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-        opacity: 0.04;
-        filter: blur(0.5px);
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: floatOrb 20s ease-in-out infinite;
         pointer-events: none;
+    }
+
+    .light-orb-1 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, transparent 70%);
+        top: -100px;
+        right: -100px;
+        animation-delay: 0s;
+    }
+
+    .light-orb-2 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(244, 114, 182, 0.3) 0%, transparent 70%);
+        bottom: -50px;
+        left: -50px;
+        animation-delay: -7s;
+    }
+
+    .light-orb-3 {
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        animation-delay: -14s;
+    }
+
+    .light-orb-4 {
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(251, 146, 60, 0.35) 0%, transparent 70%);
+        bottom: 20%;
+        right: 20%;
+        animation-delay: -3s;
+    }
+
+    @keyframes floatOrb {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(30px, -30px) scale(1.1); }
+        50% { transform: translate(-20px, 20px) scale(0.9); }
+        75% { transform: translate(20px, 30px) scale(1.05); }
+    }
+
+    /* Sparkle Stars */
+    .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        animation: sparkle 3s ease-in-out infinite;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    @keyframes sparkle {
+        0%, 100% { opacity: 0; transform: scale(0); }
+        50% { opacity: 1; transform: scale(1); }
     }
 
     .hero-content {
@@ -59,68 +113,71 @@
         max-width: 900px;
     }
 
-    /* RITUAL SEQUENCE: Step 1 - Kanji Appears First (Sacred) */
+    /* Kanji with Warm Glow */
     .hero-kanji {
         font-family: 'Shippori Mincho', 'Noto Sans JP', serif;
         font-size: clamp(3rem, 8vw, 6rem);
-        color: var(--sakura-outline);
+        background: linear-gradient(135deg, #fcd34d 0%, #fb923c 50%, #f472b6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         letter-spacing: 0.5em;
         margin-bottom: 1rem;
         opacity: 0;
-        animation: kanjiRitual 2s ease-out 0.3s forwards;
-        filter: drop-shadow(0 0 20px var(--sakura-glow));
+        animation: kanjiWarmReveal 2s ease-out 0.3s forwards;
+        filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.5));
     }
 
-    @keyframes kanjiRitual {
+    @keyframes kanjiWarmReveal {
         0% { 
             opacity: 0; 
             transform: scale(0.8) translateY(20px);
-            filter: blur(10px);
-        }
-        60% { 
-            opacity: 0.5;
-            filter: blur(5px);
+            filter: blur(10px) drop-shadow(0 0 0 transparent);
         }
         100% { 
-            opacity: 0.9; 
+            opacity: 1; 
             transform: scale(1) translateY(0);
-            filter: blur(0);
+            filter: blur(0) drop-shadow(0 0 40px rgba(251, 191, 36, 0.6));
         }
     }
 
-    /* RITUAL SEQUENCE: Step 2 - Brush Line Draws */
+    /* Animated Brush Line - Warm Colors */
     .hero-brush {
         width: 0;
         height: 4px;
         background: linear-gradient(90deg, 
             transparent, 
-            var(--sakura-outline) 20%, 
-            var(--sakura-outline) 80%, 
+            #fcd34d 20%, 
+            #fb923c 50%,
+            #f472b6 80%, 
             transparent);
         margin: 0 auto 2rem;
-        box-shadow: 0 0 20px var(--sakura-glow);
-        animation: brushDraw 1.5s cubic-bezier(0.4, 0, 0.2, 1) 2.5s forwards;
+        box-shadow: 0 0 30px rgba(251, 146, 60, 0.6);
+        animation: brushDrawWarm 1.5s cubic-bezier(0.4, 0, 0.2, 1) 2.5s forwards;
+        border-radius: 2px;
     }
 
-    @keyframes brushDraw {
+    @keyframes brushDrawWarm {
         0% { width: 0; opacity: 0; }
         20% { opacity: 1; }
-        100% { width: min(300px, 60vw); opacity: 1; }
+        100% { width: min(350px, 70vw); opacity: 1; }
     }
 
-    /* RITUAL SEQUENCE: Step 3 - Title Reveals Last */
+    /* Title with Gradient */
     .hero-title {
         font-family: var(--font-heading);
         font-size: clamp(4rem, 12vw, 8rem);
         font-weight: 700;
         letter-spacing: 0.25em;
         margin-bottom: 1.5rem;
-        text-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(180deg, #ffffff 0%, #fef3c7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 60px rgba(251, 191, 36, 0.3);
         opacity: 0;
-        animation: titleRitual 1.2s ease-out 4s forwards;
+        animation: titleWarmReveal 1.2s ease-out 4s forwards;
     }
 
-    @keyframes titleRitual {
+    @keyframes titleWarmReveal {
         0% { 
             opacity: 0; 
             transform: translateY(30px);
@@ -139,28 +196,46 @@
         opacity: 0;
         margin-bottom: 2.5rem;
         letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.9);
         animation: subtitleFade 1s ease-out 5s forwards;
     }
 
-
     @keyframes subtitleFade {
         from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 0.85; transform: translateY(0); }
+        to { opacity: 0.9; transform: translateY(0); }
     }
 
+    /* CTA Button - Warm Gradient */
     .hero-cta {
         display: inline-block;
-        background: linear-gradient(135deg, var(--indigo-800), var(--indigo-900));
-        color: var(--ivory-100);
-        padding: 1rem 2.5rem;
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ec4899 100%);
+        color: white;
+        padding: 1.1rem 2.8rem;
         border-radius: 3rem;
         font-weight: 600;
         font-size: 1.1rem;
         opacity: 0;
         animation: ctaReveal 0.8s ease-out 5.5s forwards;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 20px rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 
+            0 4px 20px rgba(249, 115, 22, 0.4),
+            0 0 40px rgba(249, 115, 22, 0.2);
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-cta::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .hero-cta:hover::before {
+        opacity: 1;
     }
 
     @keyframes ctaReveal {
@@ -169,34 +244,36 @@
     }
 
     .hero-cta:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 30px rgba(217, 119, 6, 0.3);
-        background: linear-gradient(135deg, var(--indigo-700), var(--indigo-800));
-        border-color: var(--gold-600);
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 
+            0 12px 40px rgba(249, 115, 22, 0.5),
+            0 0 60px rgba(249, 115, 22, 0.3);
     }
 
+    /* Scroll Indicator */
     .hero-scroll {
         position: absolute;
         bottom: 2rem;
         left: 50%;
         transform: translateX(-50%);
-        color: white;
+        color: rgba(251, 191, 36, 0.7);
         opacity: 0;
-        animation: scrollReveal 1s ease-out 2.2s forwards, scrollBounce 2s ease-in-out 3s infinite;
+        font-size: 1.5rem;
+        animation: scrollReveal 1s ease-out 6s forwards, scrollBounce 2s ease-in-out 7s infinite;
     }
 
     @keyframes scrollReveal {
-        to { opacity: 0.5; }
+        to { opacity: 0.7; }
     }
 
     @keyframes scrollBounce {
         0%, 100% { transform: translateX(-50%) translateY(0); }
-        50% { transform: translateX(-50%) translateY(8px); }
+        50% { transform: translateX(-50%) translateY(10px); }
     }
 
-    /* ===== PHILOSOPHY BLOCKS ===== */
+    /* ===== PHILOSOPHY BLOCKS - WARM THEME ===== */
     .philosophy-section {
-        background: var(--neutral-50);
+        background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
         padding: 5rem 1.5rem;
         position: relative;
     }
@@ -609,20 +686,31 @@
 @endpush
 
 @section('content')
-    <!-- Hero Section - Full Identity -->
+    <!-- Hero Section - Warm Glowing Atmosphere -->
     <section class="hero">
-        <!-- Background Kanji -->
-        <div class="hero-kanji-bg">万歳</div>
+        <!-- Floating Light Orbs -->
+        <div class="light-orb light-orb-1"></div>
+        <div class="light-orb light-orb-2"></div>
+        <div class="light-orb light-orb-3"></div>
+        <div class="light-orb light-orb-4"></div>
+        
+        <!-- Sparkle Stars -->
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 30%; right: 20%; animation-delay: 0.5s;"></div>
+        <div class="sparkle" style="top: 60%; left: 25%; animation-delay: 1s;"></div>
+        <div class="sparkle" style="top: 70%; right: 30%; animation-delay: 1.5s;"></div>
+        <div class="sparkle" style="top: 40%; left: 60%; animation-delay: 2s;"></div>
+        <div class="sparkle" style="top: 80%; left: 40%; animation-delay: 2.5s;"></div>
         
         <div class="hero-content">
-            <div class="hero-kanji ritual-text">万歳</div>
-            <h1 class="hero-title ritual-text">BANZAI</h1>
-            <div class="hero-brush ritual-light"></div>
-            <p class="hero-subtitle ritual-text">Eskul Bahasa Jepang SMKN 13 Bandung</p>
-            <a href="{{ route('register') }}" class="hero-cta ritual-text">Bergabung Sekarang</a>
+            <div class="hero-kanji">万歳</div>
+            <h1 class="hero-title">BANZAI</h1>
+            <div class="hero-brush"></div>
+            <p class="hero-subtitle">Eskul Bahasa Jepang SMKN 13 Bandung</p>
+            <a href="{{ route('register') }}" class="hero-cta">✨ Bergabung Sekarang</a>
         </div>
         
-        <div class="hero-scroll ritual-light">▽</div>
+        <div class="hero-scroll">▽</div>
     </section>
 
     <!-- Philosophy Blocks -->

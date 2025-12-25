@@ -6,225 +6,111 @@ use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\QuizResult;
 use App\Models\MemberGroupAssignment;
+use App\Services\Quiz\QuizScoringService;
+use App\Services\Quiz\QuizGroupResolver;
+use App\Services\Quiz\QuizConsistencyService;
+use App\Services\Quiz\TitleService;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
     /**
-     * Quiz questions with scoring weights
-     * Format: question => [option => [group_name => score]]
+     * Personality quiz questions
+     * Each answer has a point value (1-4)
+     * Lower scores = analytical/structured personality (MUSASHI)
+     * Higher scores = harmonious/collaborative personality (YAMATO)
      */
-    private function getQuizQuestions()
+    private function getQuizQuestions(): array
     {
         return [
             [
-                'question' => 'Ketika berada di dalam tim, peran apa yang paling sering kamu ambil?',
+                'question' => 'Ketika menghadapi masalah yang rumit, apa yang biasanya kamu lakukan pertama kali?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Menyusun konsep dan memastikan semua detail benar',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 0, 'YAMATO' => 1]
-                    ],
-                    'B' => [
-                        'text' => 'Menghidupkan suasana dan mengekspresikan ide kreatif',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Menyebarkan informasi dan bergerak cepat',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 0, 'FUJIN' => 3, 'YAMATO' => 1]
-                    ],
-                    'D' => [
-                        'text' => 'Menjaga kekompakan dan arah tim',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Menganalisis dengan tenang, menyusun langkah-langkah detail', 'score' => 1],
+                    ['text' => 'Mencari cara kreatif dan out of the box', 'score' => 2],
+                    ['text' => 'Bertindak cepat dan beradaptasi seiring waktu', 'score' => 3],
+                    ['text' => 'Berdiskusi dengan orang lain untuk mencari solusi bersama', 'score' => 4],
                 ],
             ],
             [
-                'question' => 'Bagaimana cara kamu menyelesaikan masalah?',
+                'question' => 'Bagaimana cara kamu menjalin pertemanan baru?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Menganalisis dengan tenang dan mencari solusi terbaik',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 1, 'YAMATO' => 2]
-                    ],
-                    'B' => [
-                        'text' => 'Mencari cara kreatif dan unik untuk menyelesaikannya',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Bertindak cepat dan adaptif',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 0, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Mengajak diskusi dan mencari konsensus',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Perlahan dan selektif, lebih suka hubungan mendalam', 'score' => 1],
+                    ['text' => 'Melalui aktivitas kreatif atau hobi bersama', 'score' => 2],
+                    ['text' => 'Mudah bergaul dan cepat akrab dengan siapa saja', 'score' => 3],
+                    ['text' => 'Ramah dan terbuka, senang membantu orang lain', 'score' => 4],
                 ],
             ],
             [
-                'question' => 'Apa yang paling kamu nikmati saat berkontribusi di BANZAI?',
+                'question' => 'Apa yang membuatmu merasa paling bersemangat?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Belajar hal baru dan menguasai skill',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 1]
-                    ],
-                    'B' => [
-                        'text' => 'Mengekspresikan diri dan berkarya',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Berbagi informasi dan terhubung dengan banyak orang',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 1, 'FUJIN' => 3, 'YAMATO' => 1]
-                    ],
-                    'D' => [
-                        'text' => 'Menjadi bagian dari keluarga besar BANZAI',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 1, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Menguasai skill baru hingga sempurna', 'score' => 1],
+                    ['text' => 'Menciptakan sesuatu yang unik dan personal', 'score' => 2],
+                    ['text' => 'Petualangan dan pengalaman baru', 'score' => 3],
+                    ['text' => 'Membuat orang lain bahagia', 'score' => 4],
                 ],
             ],
             [
-                'question' => 'Ketika menghadapi deadline, kamu cenderung:',
+                'question' => 'Ketika bekerja dalam tim, peran apa yang paling nyaman untukmu?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Menyusun rencana detail dan mengikutinya',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 1, 'YAMATO' => 2]
-                    ],
-                    'B' => [
-                        'text' => 'Bekerja dengan flow dan improvisasi',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Bergerak cepat dan multitasking',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 0, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Koordinasi dengan tim dan saling support',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Perencana/strategist yang menyusun konsep', 'score' => 1],
+                    ['text' => 'Creative director yang membawa ide segar', 'score' => 2],
+                    ['text' => 'Eksekutor yang bergerak cepat', 'score' => 3],
+                    ['text' => 'Perantara yang menjaga harmoni tim', 'score' => 4],
                 ],
             ],
             [
-                'question' => 'Lingkungan kerja seperti apa yang membuatmu paling produktif?',
+                'question' => 'Bagaimana kamu menghabiskan waktu luang idealmu?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Tenang, terstruktur, dan fokus',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 0, 'YAMATO' => 2]
-                    ],
-                    'B' => [
-                        'text' => 'Kreatif, bebas, dan ekspresif',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Dinamis, cepat, dan penuh energi',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 1, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Harmonis, supportif, dan kolaboratif',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Membaca, belajar, atau mengasah kemampuan', 'score' => 1],
+                    ['text' => 'Berkreasi: menggambar, musik, atau kerajinan', 'score' => 2],
+                    ['text' => 'Jalan-jalan, eksplor tempat baru, atau olahraga', 'score' => 3],
+                    ['text' => 'Quality time bersama keluarga atau teman', 'score' => 4],
                 ],
             ],
             [
-                'question' => 'Apa yang paling menggambarkan cara kamu berkomunikasi?',
+                'question' => 'Apa yang paling menggangumu?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Jelas, to the point, dan terstruktur',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 1, 'YAMATO' => 1]
-                    ],
-                    'B' => [
-                        'text' => 'Ekspresif, penuh cerita, dan emosional',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Cepat, ringkas, dan langsung action',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 0, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Mendengarkan dulu, lalu merespons dengan bijak',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Ketidakteraturan dan kurangnya perencanaan', 'score' => 1],
+                    ['text' => 'Kebosanan dan rutinitas monoton', 'score' => 2],
+                    ['text' => 'Proses yang lambat dan tidak efisien', 'score' => 3],
+                    ['text' => 'Konflik dan ketidakharmonisan', 'score' => 4],
                 ],
             ],
             [
-                'question' => 'Ketika ada ide baru, kamu biasanya:',
+                'question' => 'Ketika menerima kritik, bagaimana responmu?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Memikirkan detail dan kelayakannya',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 0, 'YAMATO' => 2]
-                    ],
-                    'B' => [
-                        'text' => 'Langsung excited dan ingin mengembangkannya',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Langsung share ke banyak orang',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 1, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Diskusikan dengan tim untuk feedback',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
-                ],
-            ],
-            [
-                'question' => 'Apa yang membuatmu merasa paling bangga?',
-                'options' => [
-                    'A' => [
-                        'text' => 'Menguasai skill baru dengan sempurna',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 1]
-                    ],
-                    'B' => [
-                        'text' => 'Menciptakan sesuatu yang unik dan bermakna',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Menyebarkan impact ke banyak orang',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 1, 'FUJIN' => 3, 'YAMATO' => 1]
-                    ],
-                    'D' => [
-                        'text' => 'Menjadi bagian dari pencapaian tim',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 1, 'YAMATO' => 3]
-                    ],
-                ],
-            ],
-            [
-                'question' => 'Bagaimana kamu menghadapi perubahan?',
-                'options' => [
-                    'A' => [
-                        'text' => 'Menganalisis dulu, lalu menyesuaikan dengan hati-hati',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 0, 'YAMATO' => 2]
-                    ],
-                    'B' => [
-                        'text' => 'Melihatnya sebagai peluang untuk berkreasi',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Langsung adapt dan bergerak cepat',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 1, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Memastikan semua orang siap dan nyaman',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 0, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Menganalisis objektif: mana yang valid, mana yang tidak', 'score' => 1],
+                    ['text' => 'Melihatnya sebagai perspektif berbeda, menarik untuk direnungkan', 'score' => 2],
+                    ['text' => 'Langsung action untuk perbaikan jika memang benar', 'score' => 3],
+                    ['text' => 'Mencoba memahami konteks dan perasaan pemberi kritik', 'score' => 4],
                 ],
             ],
             [
                 'question' => 'Apa filosofi hidupmu yang paling dekat?',
                 'options' => [
-                    'A' => [
-                        'text' => 'Konsistensi dan disiplin membawa kesempurnaan',
-                        'scores' => ['MUSASHI' => 3, 'AME-NO-UZUME' => 0, 'FUJIN' => 0, 'YAMATO' => 2]
-                    ],
-                    'B' => [
-                        'text' => 'Hidup adalah seni yang harus diekspresikan',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 3, 'FUJIN' => 1, 'YAMATO' => 0]
-                    ],
-                    'C' => [
-                        'text' => 'Kecepatan dan adaptasi adalah kunci',
-                        'scores' => ['MUSASHI' => 0, 'AME-NO-UZUME' => 1, 'FUJIN' => 3, 'YAMATO' => 0]
-                    ],
-                    'D' => [
-                        'text' => 'Kebersamaan dan harmoni adalah segalanya',
-                        'scores' => ['MUSASHI' => 1, 'AME-NO-UZUME' => 1, 'FUJIN' => 1, 'YAMATO' => 3]
-                    ],
+                    ['text' => 'Ketekunan dan kesempurnaan adalah kunci kesuksesan', 'score' => 1],
+                    ['text' => 'Hidup adalah kanvas untuk diekspresikan', 'score' => 2],
+                    ['text' => 'Kesempatan datang pada yang berani bertindak', 'score' => 3],
+                    ['text' => 'Kebersamaan dan harmoni adalah segalanya', 'score' => 4],
+                ],
+            ],
+            [
+                'question' => 'Bagaimana cara kamu menghadapi perubahan mendadak?',
+                'options' => [
+                    ['text' => 'Hati-hati, perlu waktu untuk menyesuaikan rencana', 'score' => 1],
+                    ['text' => 'Excited! Melihatnya sebagai peluang baru', 'score' => 2],
+                    ['text' => 'Santai, langsung beradaptasi tanpa banyak pikir', 'score' => 3],
+                    ['text' => 'Fokus menjaga agar semua orang tetap nyaman', 'score' => 4],
+                ],
+            ],
+            [
+                'question' => 'Apa yang paling membuatmu bangga pada diri sendiri?',
+                'options' => [
+                    ['text' => 'Keahlian dan pengetahuan yang sudah dikuasai', 'score' => 1],
+                    ['text' => 'Karya dan kreasi yang sudah dibuat', 'score' => 2],
+                    ['text' => 'Pengalaman dan pencapaian yang sudah diraih', 'score' => 3],
+                    ['text' => 'Hubungan baik dengan orang-orang di sekitar', 'score' => 4],
                 ],
             ],
         ];
@@ -238,14 +124,16 @@ class QuizController extends Controller
         $user = auth()->user();
         
         // Check if already completed this month
-        if (QuizResult::hasCompletedThisMonth($user->id)) {
-            return redirect()->route('member.dashboard')
+        $existingResult = QuizResult::getLatestThisMonth($user->id);
+        if ($existingResult) {
+            return redirect()->route('member.quiz.result', $existingResult->id)
                 ->with('info', 'Kamu sudah menyelesaikan quiz bulan ini!');
         }
         
         $questions = $this->getQuizQuestions();
+        $titleProgress = TitleService::getProgress($user);
         
-        return view('member.quiz.index', compact('questions'));
+        return view('member.quiz.index', compact('questions', 'titleProgress'));
     }
 
     /**
@@ -255,63 +143,29 @@ class QuizController extends Controller
     {
         $user = auth()->user();
         
-        // Check if already completed this month
-        if (QuizResult::hasCompletedThisMonth($user->id)) {
-            return redirect()->route('member.dashboard')
-                ->with('error', 'Kamu sudah menyelesaikan quiz bulan ini!');
-        }
-        
-        // Validate answers
+        // Validate answers (10 answers, each 1-4)
         $validated = $request->validate([
             'answers' => 'required|array|size:10',
-            'answers.*' => 'required|in:A,B,C,D',
+            'answers.*' => 'required|integer|between:1,4',
         ]);
         
-        // Calculate scores
-        $questions = $this->getQuizQuestions();
-        $groupScores = [
-            'MUSASHI' => 0,
-            'AME-NO-UZUME' => 0,
-            'FUJIN' => 0,
-            'YAMATO' => 0,
-        ];
+        // Calculate score using service
+        $score = QuizScoringService::calculate($validated['answers']);
         
-        foreach ($validated['answers'] as $index => $answer) {
-            $question = $questions[$index];
-            $scores = $question['options'][$answer]['scores'];
-            
-            foreach ($scores as $groupName => $score) {
-                $groupScores[$groupName] += $score;
-            }
-        }
+        // Resolve group using service
+        $resolution = QuizGroupResolver::fromScore($score);
+        $group = $resolution['group'];
+        $isBorderline = $resolution['is_borderline'];
         
-        // Determine winning group
-        $maxScore = max($groupScores);
-        $winningGroups = array_keys($groupScores, $maxScore);
-        
-        // If tie, check previous result or default to YAMATO
-        if (count($winningGroups) > 1) {
-            $previousResult = QuizResult::getPreviousResult($user->id);
-            if ($previousResult) {
-                $previousGroupName = $previousResult->group->name;
-                if (in_array($previousGroupName, $winningGroups)) {
-                    $winningGroupName = $previousGroupName;
-                } else {
-                    $winningGroupName = in_array('YAMATO', $winningGroups) ? 'YAMATO' : $winningGroups[0];
-                }
-            } else {
-                $winningGroupName = in_array('YAMATO', $winningGroups) ? 'YAMATO' : $winningGroups[0];
-            }
-        } else {
-            $winningGroupName = $winningGroups[0];
-        }
-        
-        // Get group
-        $group = Group::where('name', $winningGroupName)->first();
-        
-        // Check if same as previous month
+        // Check previous result
         $previousResult = QuizResult::getPreviousResult($user->id);
         $isSameAsPrevious = $previousResult && $previousResult->group_id === $group->id;
+        
+        // Delete existing this month (if re-taking)
+        QuizResult::where('user_id', $user->id)
+            ->where('month', now()->month)
+            ->where('year', now()->year)
+            ->delete();
         
         // Save quiz result
         $quizResult = QuizResult::create([
@@ -320,12 +174,16 @@ class QuizController extends Controller
             'month' => now()->month,
             'year' => now()->year,
             'answers' => $validated['answers'],
-            'scores' => $groupScores,
-            'total_score' => $maxScore,
+            'scores' => [
+                'total' => $score,
+                'breakdown' => $validated['answers'],
+            ],
+            'total_score' => $score,
             'is_same_as_previous' => $isSameAsPrevious,
+            'is_borderline' => $isBorderline,
         ]);
         
-        // Update or create group assignment
+        // Update group assignment
         MemberGroupAssignment::updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -335,18 +193,12 @@ class QuizController extends Controller
             ]
         );
         
-        // Update member level
-        $profile = $user->memberProfile;
-        if ($isSameAsPrevious) {
-            // Increase level (max 3)
-            $profile->level = min($profile->level + 1, 3);
-        } else {
-            // Reset to level 1
-            $profile->level = 1;
-        }
-        $profile->save();
+        // Evaluate and award title using service
+        $titleResult = TitleService::evaluate($user->fresh(), $group);
         
-        // Redirect to result page
+        // Store title result in session for result page
+        session(['quiz_title_result' => $titleResult]);
+        
         return redirect()->route('member.quiz.result', $quizResult->id);
     }
 
@@ -355,13 +207,29 @@ class QuizController extends Controller
      */
     public function result($id)
     {
-        $quizResult = QuizResult::with('group')->findOrFail($id);
+        $quizResult = QuizResult::with('group', 'user.title')->findOrFail($id);
         
-        // Make sure it's the current user's result
+        // Ensure it's the user's own result
         if ($quizResult->user_id !== auth()->id()) {
             abort(403);
         }
         
-        return view('member.quiz.result', compact('quizResult'));
+        $user = auth()->user();
+        $titleResult = session('quiz_title_result', [
+            'awarded' => false,
+            'title' => null,
+            'message' => null,
+            'progress' => TitleService::getProgress($user)['progress'],
+        ]);
+        
+        $consistency = QuizConsistencyService::check($user);
+        $scoreStats = QuizScoringService::getStats($quizResult->total_score);
+        
+        return view('member.quiz.result', compact(
+            'quizResult', 
+            'titleResult', 
+            'consistency',
+            'scoreStats'
+        ));
     }
 }

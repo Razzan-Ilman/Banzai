@@ -4,24 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Member extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'class',
         'major',
         'position',
         'division_id',
+        'position_id',
         'photo',
         'initial_color',
         'order',
         'is_active',
+        'status',
+        'start_date',
+        'end_date',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'order' => 'integer',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     /**
@@ -33,11 +42,27 @@ class Member extends Model
     }
 
     /**
+     * Get the position that the member has.
+     */
+    public function positionRole(): BelongsTo
+    {
+        return $this->belongsTo(Position::class, 'position_id');
+    }
+
+    /**
      * Scope to get only active members.
      */
     public function scopeActive($query)
     {
-        return $query->where('is_active', true)->orderBy('order');
+        return $query->where('is_active', true)->where('status', 'active')->orderBy('order');
+    }
+
+    /**
+     * Scope to get alumni members.
+     */
+    public function scopeAlumni($query)
+    {
+        return $query->where('status', 'alumni')->orderBy('end_date', 'desc');
     }
 
     /**
@@ -78,5 +103,24 @@ class Member extends Model
     public function hasPhoto(): bool
     {
         return !empty($this->photo);
+    }
+
+    /**
+     * Check if member is alumni.
+     */
+    public function isAlumni(): bool
+    {
+        return $this->status === 'alumni';
+    }
+
+    /**
+     * Get display position name (from Position model or legacy field).
+     */
+    public function getDisplayPositionAttribute(): ?string
+    {
+        if ($this->positionRole) {
+            return $this->positionRole->name;
+        }
+        return $this->position;
     }
 }
